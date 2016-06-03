@@ -40,7 +40,7 @@ angular.module('starter.controllers', ['ngCart'])
             
             $scope.refreshCatalogScroll = function () {
                 var height = window.innerHeight;
-                var catalog_height = height - 100;
+                var catalog_height = height - 132;
                 var catalogObj = document.getElementById('catalogScroll');
                 catalogObj.style.height = catalog_height+"px";
             };
