@@ -33,7 +33,7 @@ angular.module('starter.controllers', ['ngCart'])
             
             $scope.refreshBasketScroll = function () {
                 var height = window.innerHeight;
-                var basket_height = height - 250;
+                var basket_height = height - 282;
                 var basketObj = document.getElementById('basketScroll');
                 basketObj.style.height = basket_height+"px";
             };
