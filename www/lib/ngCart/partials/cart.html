@@ -1,0 +1,28 @@
+<div class="button button-full button-stable" role="alert" ng-show="ngCart.getTotalItems() === 0">
+    Your cart is empty
+</div>
+
+<div class="list">
+    <div class="item" ng-repeat="item in ngCart.getCart().items track by $index" >
+        <div style="width: auto; float: left"><span class="button">{{ item.getName()}}</span></div> 
+        <div style="width: 90px; float: right; text-align:right"><span class="button ">{{ (item.getTotal() | number:2) + " €"}}</span></div>
+        <div style="float: right">
+            <span class="button btn-default  icon ion-minus"
+                  ng-click="item.setQuantity( - 1, true)"></span>
+            <span class="button">{{ item.getQuantity() | number}}</span>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .ngCart.cart span[ng-click] {
+        cursor: pointer;
+    }
+    .ngCart.cart .glyphicon.disabled {
+        color:#aaa;
+    }
+    .ngCart.cart td .btn {
+        margin-top: -10px
+    }
+</style>

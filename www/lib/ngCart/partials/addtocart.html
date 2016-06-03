@@ -1,0 +1,11 @@
+<div ng-hide="attrs.id">
+    <a class="btn btn-lg btn-primary" ng-disabled="true" ng-transclude></a>
+</div>
+
+<div ng-show="attrs.id">
+    <div>
+        <a class="btn btn-success"
+           ng-click="ngCart.addItem(id, name, price, q, data)"
+           ng-transclude><i class="icon ion-ios-cart"></i></a>
+    </div>
+</div>

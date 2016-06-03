@@ -1,0 +1,14 @@
+<ion-view view-title="Basket">
+    <ion-content class="padding"  scroll='false' ng-init="loadProducts()">
+        
+        <div class = "row  responsive-sm">
+            <div class = "col  col-60">                
+                <div  ng-include="'templates/product_catalog.html'"></div>
+            </div>
+            <div class = "col">
+                <div  ng-include="'templates/basket.html'"></div>
+            </div>
+        </div>
+        
+    </ion-content>  
+</ion-view>
