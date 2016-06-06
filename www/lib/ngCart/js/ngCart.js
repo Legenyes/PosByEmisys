@@ -15,6 +15,7 @@ angular.module('ngCart', ['ngCart.directives'])
     .run(['$rootScope', 'ngCart','ngCartItem', 'store', function ($rootScope, ngCart, ngCartItem, store) {
 
         $rootScope.$on('ngCart:change', function(){
+            ngCart.clearCart();
             ngCart.$save();
         });
 
@@ -53,6 +54,19 @@ angular.module('ngCart', ['ngCart.directives'])
 
             $rootScope.$broadcast('ngCart:change', {});
         };
+
+        this.clearCart = function ()
+        {
+            var items = this.getItems();
+            var ngCart = this;
+            var i = 0;
+            angular.forEach(items, function (item) {                
+                if(item.getQuantity()<=0){            
+                    ngCart.removeItem(i);
+                }
+                i++;
+            });
+        }
 
         this.getItemById = function (itemId) {
             var items = this.getCart().items;
@@ -127,7 +141,7 @@ angular.module('ngCart', ['ngCart.directives'])
             return +parseFloat(this.getSubTotal() + this.getShipping() + this.getTax()).toFixed(2);
         };
 
-        this.removeItem = function (index) {
+        this.removeItem = function (index) {            
             this.$cart.items.splice(index, 1);
             $rootScope.$broadcast('ngCart:itemRemoved', {});
             $rootScope.$broadcast('ngCart:change', {});
@@ -249,7 +263,7 @@ angular.module('ngCart', ['ngCart.directives'])
                 } else {
                     this._quantity = quantityInt;
                 }
-                if (this._quantity < 1) this._quantity = 1;
+                //if (this._quantity < 1) this._quantity = 1;
 
             } else {
                 this._quantity = 1;

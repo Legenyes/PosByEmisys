@@ -13,6 +13,7 @@
     font-weight: 500;
     line-height: 24px;
     padding-top: 23px;
+    text-align: center;
 }
 .pane{
     background-color: #db4454;
@@ -34,10 +35,32 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
+.tabs-top > .tabs,
+.tabs.tabs-top{
+	top: 0;
+}
+.has-tabs-top {
+    top: 70px;
+}
+.view-container{
+	border-bottom: 10px solid #db4454;
+}
 .tab-nav.tabs {
     background-color: #db4454;
     height: 60px;
     padding-top: 5px;
+    top: 0;
+}
+.tab-nav.tabs {
+    background-color: #000;
+    height: 70px;
+    padding-top: 10px;
+    top: 0;
+    color: #fff;
+    background-image: url("../img/by-emisys-logo.png");
+    background-repeat: no-repeat;
+    background-position: left 20px center;
+    background-size: 93px 60px;
 }
 ion-tabs.tabs-color-active-positive .tab-item{
     color: #fff;

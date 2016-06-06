@@ -7,13 +7,15 @@
 </ion-scroll>
 
 
-<br />
-<div class="item"  style="padding:0px; padding-right: 16px;">
-    <div style="width: auto; float: left" style="padding:0px"><span class="button">Total</span></div> 
-    <div style="width: 30px; float: right; margin-top: 7px;">&nbsp;</div>
-    <div style="width: 100px; float: right; text-align:right"><span class="button "><strong>{{ (ngCart.totalCost() | number:2) + " €"}}</strong></span></div>
-</div>
+<ngcart-summary></ngcart-summary>
 
-<div ng-click="emptyBasket()" class="button button-full button-balanced" role="alert" ng-show="ngCart.getTotalItems() != 0">
-    <i class="icon ion-ios-cart"></i> Payer
-</div>
+<script id="modal-payment.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">My Modal title</h1>
+    </ion-header-bar>
+    <ion-content>
+      Hello!
+    </ion-content>
+  </ion-modal-view>
+</script>

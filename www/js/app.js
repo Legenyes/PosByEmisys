@@ -46,7 +46,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             });
         })
 
-        .config(function ($stateProvider, $urlRouterProvider) {
+        .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+            
+            $ionicConfigProvider.tabs.position("top"); 
+            $ionicConfigProvider.tabs.style("standard"); 
             $stateProvider
 
                     // setup an abstract state for the tabs directive
