@@ -1,6 +1,6 @@
 <ion-scroll id="catalogScroll" ng-init="refreshCatalogScroll()" style="width: 100%; height: 900px ">
     <div class="row" ng-repeat="product in products" ng-if="$index % productPerRow === 0">                    
-        <div class="col col-{{ 100 / productPerRow}}" ng-repeat="n in range(0, productPerRow - 1)" ng-if=" $parent.$parent.$index + $index < products.length">
+        <div class="prod-content col col-{{ 100 / productPerRow}}" ng-repeat="n in range(0, productPerRow - 1)" ng-if=" $parent.$parent.$index + $index < products.length">
             {{ product = products[$parent.$parent.$index + n];""}}
             <div  ng-include="'templates/product_mosaic.html'"></div>
         </div>                    

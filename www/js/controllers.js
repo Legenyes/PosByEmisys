@@ -33,14 +33,14 @@ angular.module('starter.controllers', ['ngCart'])
             
             $scope.refreshBasketScroll = function () {
                 var height = window.innerHeight;
-                var basket_height = height - 282;
+                var basket_height = height - 250;
                 var basketObj = document.getElementById('basketScroll');
                 basketObj.style.height = basket_height+"px";
             };
             
             $scope.refreshCatalogScroll = function () {
                 var height = window.innerHeight;
-                var catalog_height = height - 132;
+                var catalog_height = height - 147;
                 var catalogObj = document.getElementById('catalogScroll');
                 catalogObj.style.height = catalog_height+"px";
             };

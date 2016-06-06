@@ -1,0 +1,55 @@
+.bar-stable.bar.bar-header{
+    background-color: #000;
+    height:70px;
+}
+.bar.bar-stable .title{
+    color: #fff;
+    background-image: url("../img/by-emisys-logo.png");
+    background-repeat: no-repeat;
+    background-position: left 20px center;
+    background-size: 93px 60px;
+    height:70px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    padding-top: 23px;
+}
+.pane{
+    background-color: #db4454;
+    color: #fff;
+    background-image: url("../img/byemisys-bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size:cover;
+}
+.has-header {
+    top: 70px;
+}
+.prod-content .btn.btn-success img{
+    display: block;
+    border:1px solid #000;
+}
+.button.button-balanced {
+    background-color: #36bc9b;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.tab-nav.tabs {
+    background-color: #db4454;
+    height: 60px;
+    padding-top: 5px;
+}
+ion-tabs.tabs-color-active-positive .tab-item{
+    color: #fff;
+}
+ion-tabs.tabs-color-active-positive .tab-item.tab-item-active,
+ion-tabs.tabs-color-active-positive .tab-item.active,
+ion-tabs.tabs-color-active-positive .tab-item.activated{
+    color:#fff;
+}
+.item{
+    -webkit-border-radius:6px;
+    -moz-border-radius:6px;
+    border-radius:6px;
+    margin-bottom: 10px;
+}

@@ -1,4 +1,8 @@
 .scroll-view.scroll-y 
 {
-    /*overflow-y: hidden;    */
+    overflow-y: auto;
 }
+.bar.bar-stable {
+    background-image: none;
+}
+
