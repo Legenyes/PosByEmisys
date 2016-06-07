@@ -34,6 +34,11 @@
     background-color: #36bc9b;
     padding-top: 10px;
     padding-bottom: 10px;
+    
+    height: 100px;
+    color: black;
+    font-weight: bold;
+    font-size: 35px;
 }
 .tabs-top > .tabs,
 .tabs.tabs-top{

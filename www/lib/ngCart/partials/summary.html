@@ -1,8 +1,3 @@
-<div class="item"  style="padding:0px; padding-right: 16px;">
-    <div style="width: auto; float: left" style="padding:0px"><span class="button">Total</span></div> 
-    <div style="width: 30px; float: right; margin-top: 7px;">&nbsp;</div>
-    <div style="width: 100px; float: right; text-align:right"><span class="button "><strong>{{ (ngCart.totalCost() | number:2) + " €"}}</strong></span></div>
-</div>
-<div ng-click="showPaymentModal()" class="button button-full button-balanced" role="alert" ng-show="ngCart.getTotalItems() != 0">
-    <i class="icon ion-ios-cart"></i> Payer
-</div>
+<button ng-click="showPaymentModal()" class="button button-full button-balanced" role="alert" >
+    Payer {{ (ngCart.totalCost() | number:2) + " €"}}
+</button>

@@ -1,8 +1,9 @@
-angular.module('starter.controllers', ['ngCart'])
+angular.module('starter.controllers', ['ngCart', 'ionic'])
 
         .controller('BasketCtrl', function ($scope, ngCart, $ionicModal) {
             $scope.products = [];
             $scope.productPerRow = 4;
+            $scope.aPayer =  ngCart.totalCost();;
 
             $scope.loadProducts = function () {
                 for (var i = 0; i < 16; i++) {
@@ -18,6 +19,10 @@ angular.module('starter.controllers', ['ngCart'])
                 }
             }
 
+            $scope.$on('ngCart:change', function (event, data) {
+                $scope.aPayer = ngCart.totalCost();
+            });
+
             $scope.range = function (min, max, step) {
                 step = step || 1;
                 var input = [];
@@ -29,14 +34,14 @@ angular.module('starter.controllers', ['ngCart'])
 
             $scope.refreshBasketScroll = function () {
                 var height = window.innerHeight;
-                var basket_height = height - 235;
+                var basket_height = height - 220;
                 var basketObj = document.getElementById('basketScroll');
                 basketObj.style.height = basket_height + "px";
             };
 
             $scope.refreshCatalogScroll = function () {
                 var height = window.innerHeight;
-                var catalog_height = height - 130;
+                var catalog_height = height - 110;
                 var catalogObj = document.getElementById('catalogScroll');
                 catalogObj.style.height = catalog_height + "px";
             };
@@ -45,21 +50,21 @@ angular.module('starter.controllers', ['ngCart'])
                 ngCart.empty();
             }
 
-            $ionicModal.fromTemplateUrl('modal-payment.html', {
+            $ionicModal.fromTemplateUrl('templates/modal-payment.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function (modal) {
-                $scope.modal = modal;
+                $scope.modalPayment = modal;
             });
             $scope.showPaymentModal = function () {
-                $scope.modal.show();
+                $scope.modalPayment.show();
             };
             $scope.closeModal = function () {
-                $scope.modal.hide();
+                $scope.modalPayment.hide();
             };
             // Cleanup the modal when we're done with it!
             $scope.$on('$destroy', function () {
-                $scope.modal.remove();
+                $scope.modalPayment.remove();
             });
             // Execute action on hide modal
             $scope.$on('modal.hidden', function () {
@@ -71,7 +76,7 @@ angular.module('starter.controllers', ['ngCart'])
             });
 
             ngCart.setShipping(0);
-            ngCart.setTaxRate(21);
+            ngCart.setTaxRate(0);
         })
 
         .controller('ChatsCtrl', function ($scope, Chats) {
