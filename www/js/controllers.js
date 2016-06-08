@@ -1,22 +1,30 @@
 angular.module('starter.controllers', ['ngCart', 'ionic'])
 
-        .controller('BasketCtrl', function ($scope, ngCart, $ionicModal) {
+        .controller('BasketCtrl', function ($scope, ngCart, $ionicModal, $http) {
             $scope.products = [];
             $scope.productPerRow = 4;
-            $scope.aPayer =  ngCart.totalCost();;
+            $scope.aPayer = ngCart.totalCost();
+            ;
 
             $scope.loadProducts = function () {
-                for (var i = 0; i < 16; i++) {
-                    $product = {
-                        'id': i,
-                        'name': 'Bière' + i,
-                        'orderAvailable': '1',
-                        'isOnSite': '1',
-                        'price': (0.33 * i) + 1,
-                        'picture': 'http://fakeimg.pl/200x200/?text=' + 'Bière' + i
-                    };
-                    $scope.products.push($product);
-                }
+                var url = "http://lasemo.leveque.ovh/api/formules/list?project=9&is_on_site=1";
+                $http.get(url).
+                        success(function (data, status, headers, config) {
+                            var log = [];
+                            angular.forEach(data, function (value, key) {
+                                $product = {
+                                    'id': value.id,
+                                    'name': value.name,
+                                    'isOnSite': value.is_on_site,
+                                    'price': value.price_with_vat,
+                                    'picture': 'http://fakeimg.pl/200x200/?text=' + value.name
+                                };
+                                this.push($product);
+                            }, $scope.products);
+                        }).
+                        error(function (data, status, headers, config) {
+                            console.log(data);
+                        });
             }
 
             $scope.$on('ngCart:change', function (event, data) {
