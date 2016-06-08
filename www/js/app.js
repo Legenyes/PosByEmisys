@@ -5,10 +5,12 @@
 // 'starter.controllers' is found in controllers.js
 
 var nfc = {
-    addTagIdListener: function (success, failure) {
-        cordova.exec(success, failure, "NfcAcr122Plugin", "listen", []);
+    addTagIdListener: function (readCardSuccess, readCardFailure) {
+        cordova.exec(readCardSuccess, readCardFailure, "NfcAcr122Plugin", "listen", []);
     }
 }
+var currentCardUid = "";
+var inPayementProcess = false;
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
@@ -26,30 +28,38 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                     StatusBar.styleDefault();
                 }
 
-                var success = function (result) {
-                    if (result) {
+                var readCardSuccess = function (result) {
+                    if (result && inPayementProcess) {
+                        currentCardUid = result;
                         //alert(result);
                         //navigator.notification.alert(result, function() {}, "NFC Tag ID");
-                        document.getElementById("tagIdDiv").innerHTML = result;
+                        var scope = angular.element($("#listCustomers")).scope();
+                        scope.$apply(function () {
+                            $customer = {
+                                'cardUid': currentCardUid,
+                                'amount': 35.12
+                            };
+                            var customers = scope.customers;
+                            customers.push($customer);
+                            scope.customers = customers;
+                        })
                     }
                 };
 
-                var failure = function (reason) {
-                     navigator.notification.alert("Error " + JSON.stringify(reason), function() {}, "NFC Tag ID");
+                var readCardFailure = function (reason) {
+                    currentCardUid = "";
+                    navigator.notification.alert("Error " + JSON.stringify(reason), function () {}, "NFC Tag ID");
                     alert("Error " + JSON.stringify(reason))
                 };
 
-                console.log("Calling plugin");
-                nfc.addTagIdListener(success, failure);
-                console.log("Called plugin");
-
+                nfc.addTagIdListener(readCardSuccess, readCardFailure);
             });
         })
 
         .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
-            
-            $ionicConfigProvider.tabs.position("top"); 
-            $ionicConfigProvider.tabs.style("standard"); 
+
+            $ionicConfigProvider.tabs.position("top");
+            $ionicConfigProvider.tabs.style("standard");
             $stateProvider
 
                     // setup an abstract state for the tabs directive

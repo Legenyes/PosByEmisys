@@ -30,7 +30,7 @@
     display: block;
     border:1px solid #000;
 }
-.button.button-balanced {
+.button.button-big, .button.button-balanced {
     background-color: #36bc9b;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -39,7 +39,9 @@
     color: black;
     font-weight: bold;
     font-size: 35px;
+    width: 100%;
 }
+
 .tabs-top > .tabs,
 .tabs.tabs-top{
 	top: 0;
@@ -81,3 +83,5 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
     border-radius:6px;
     margin-bottom: 10px;
 }
+.listCustomers {   }
+.item-small { padding: 0px; width: 95%; margin: 5px auto }

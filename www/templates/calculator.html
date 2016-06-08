@@ -1,8 +1,44 @@
-<ion-scroll id="catalogScroll" ng-init="refreshCatalogScroll()" style="width: 100%; height: 900px ">
-    <div class="row" ng-repeat="product in products" ng-if="$index % productPerRow === 0">                    
-        <div class="prod-content col col-{{ 100 / productPerRow}}" ng-repeat="n in range(0, productPerRow - 1)" ng-if=" $parent.$parent.$index + $index < products.length">
-            {{ product = products[$parent.$parent.$index + n];""}}
-            <div  ng-include="'templates/product_mosaic.html'"></div>
-        </div>                    
-    </div>
-</ion-scroll>
+<div class="row">                    
+    <div class="prod-content col col-33">
+        <button name="btnCalc7" class="numberbutton button button-big" value="7" ng-click='updateOutput(1)'>7</button>
+    </div>  
+    <div class="prod-content col col-33">
+        <button name="btnCalc8" class="numberbutton button button-big" value="8" ng-click='updateOutput(1)'>8</button>
+    </div>  
+    <div class="prod-content col col-33">
+        <button name="btnCalc9" class="numberbutton button button-big" value="9" ng-click='updateOutput(1)'>9</button>
+    </div>  
+</div>
+<div class="row">                    
+    <div class="prod-content col col-33">
+        <button name="btnCalc4" class="numberbutton button button-big" value="4" ng-click='updateOutput(1)'>4</button>
+    </div>  
+    <div class="prod-content col col-33">
+        <button name="btnCalc5" class="numberbutton button button-big" value="5" ng-click='updateOutput(1)'>5</button>
+    </div>  
+    <div class="prod-content col col-33">
+        <button name="btnCalc6" class="numberbutton button button-big" value="6" ng-click='updateOutput(1)'>6</button>
+    </div>  
+</div>
+<div class="row">                    
+    <div class="prod-content col col-33">
+        <button name="btnCalc1" class="numberbutton button button-big" value="1" ng-click='updateOutput(1)'>1</button>
+    </div>  
+    <div class="prod-content col col-33">
+        <button name="btnCalc2" class="numberbutton button button-big" value="2" ng-click='updateOutput(1)'>2</button>
+    </div>  
+    <div class="prod-content col col-33">
+        <button name="btnCalc3" class="numberbutton button button-big" value="3" ng-click='updateOutput(1)'>3</button>
+    </div>  
+</div>
+<div class="row">                    
+    <div class="prod-content col col-33">
+        <button name="btnCalc0" class="numberbutton button button-big" value="0" ng-click='updateOutput(1)'>0</button>
+    </div>  
+    <div class="prod-content col col-33">
+        <button name="btnCalc00" class="numberbutton button button-big" value="00" ng-click='updateOutput(1)'>00</button>
+    </div>  
+    <div class="prod-content col col-33">
+        <button name="btnCalc7Point" class="numberbutton button button-big" value="." ng-click='updateOutput(1)'>.</button>
+    </div>  
+</div>

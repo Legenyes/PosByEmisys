@@ -4,8 +4,11 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
             $scope.products = [];
             $scope.productPerRow = 4;
             $scope.aPayer = ngCart.totalCost();
-            ;
-
+            $scope.dejaPaye = 0.00;
+            $scope.resteAPayer = $scope.aPayer - $scope.dejaPaye;
+            $scope.customers = [];
+            
+            
             $scope.loadProducts = function () {
                 var url = "http://lasemo.leveque.ovh/api/formules/list?project=9&is_on_site=1";
                 $http.get(url).
@@ -29,6 +32,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
 
             $scope.$on('ngCart:change', function (event, data) {
                 $scope.aPayer = ngCart.totalCost();
+                $scope.resteAPayer = $scope.aPayer - $scope.dejaPaye;
             });
 
             $scope.range = function (min, max, step) {
@@ -66,9 +70,11 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
             });
             $scope.showPaymentModal = function () {
                 $scope.modalPayment.show();
+                inPayementProcess = true;
             };
             $scope.closeModal = function () {
                 $scope.modalPayment.hide();
+                inPayementProcess = false;
             };
             // Cleanup the modal when we're done with it!
             $scope.$on('$destroy', function () {
