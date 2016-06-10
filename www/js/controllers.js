@@ -1,14 +1,13 @@
 angular.module('starter.controllers', ['ngCart', 'ionic'])
 
-        .controller('BasketCtrl', function ($scope, ngCart, $ionicModal, $http) {
+        .controller('BasketCtrl', function ($scope, ngCart, $ionicModal, $http, nfcService) {
             $scope.products = [];
             $scope.productPerRow = 4;
             $scope.aPayer = ngCart.totalCost();
             $scope.dejaPaye = 0.00;
             $scope.resteAPayer = $scope.aPayer - $scope.dejaPaye;
-            $scope.customers = [];
-            
-            
+            $scope.customers = nfcService.get();
+
             $scope.loadProducts = function () {
                 var url = "http://lasemo.leveque.ovh/api/formules/list?project=9&is_on_site=1";
                 $http.get(url).
@@ -62,6 +61,10 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
                 ngCart.empty();
             }
 
+            nfcService.subscribe($scope, function customerAdded() {
+                $scope.$apply();
+            });
+
             $ionicModal.fromTemplateUrl('templates/modal-payment.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
@@ -94,18 +97,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
         })
 
         .controller('ChatsCtrl', function ($scope, Chats) {
-            // With the new view caching in Ionic, Controllers are only called
-            // when they are recreated or on app start, instead of every page change.
-            // To listen for when this page is active (for example, to refresh data),
-            // listen for the $ionicView.enter event:
-            //
-            //$scope.$on('$ionicView.enter', function(e) {
-            //});
 
-            $scope.chats = Chats.all();
-            $scope.remove = function (chat) {
-                Chats.remove(chat);
-            };
         })
 
         .controller('ChatDetailCtrl', function ($scope, $stateParams, Chats) {

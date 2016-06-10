@@ -3,16 +3,18 @@
         <div style="    text-align: center;    margin-top: 20px;">  
             <img src="img/scan.png" style="margin: auto">
         </div>
-
-        <div id="listCustomers">
-            <ion-list class="listCustomers">
-                <ion-item class="item-small" ng-repeat="item in customers" >
-                    <div style="width: auto; float: left"><span class="button">{{ item.cardUid }}</span></div> 
-                    <div style="width: 90px; float: right; text-align:right"><span class="button ">{{ (item.amount | number:2) + " €"}}</span></div>
-                </ion-item>
-            </ion-list>
-        </div>            
-
+        
+        <ion-scroll style="height: 45%;">
+            <div id="listCustomers">
+                <ion-list class="listCustomers">
+                    <ion-item class="item-small" ng-repeat="item in customers" >
+                        <div style="width: auto; float: left"><span class="button">{{ item.cardUid}}</span></div> 
+                        <div style="width: 90px; float: right; text-align:right"><span class="button ">{{ (item.amount | number:2) + " €"}}</span></div>
+                    </ion-item>
+                </ion-list>
+            </div>   
+        </ion-scroll>
+        
         <div style="position: absolute; width: 100%; bottom: 0;">
             <button class="button button-full button-balanced " ng-class="{disabled: resteAPayer > 0}"role="alert" >
                 Reste a payer {{ (resteAPayer | number:2) + " €"}}
