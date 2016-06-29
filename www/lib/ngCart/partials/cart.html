@@ -12,7 +12,7 @@
             <span class="button button-number btn-default " ng-click="item.setQuantity(-1, true)"><div class="icon ion-minus"></div>  </span>
         </div>
         <div style="float: right">            
-            <span class="button button-price">{{ item.getQuantity() | number}}</span>
+            <span id="qtt-{{ item.getId()}}" class="button button-price">{{ item.getQuantity() | number}}</span>
         </div>               
         
         <ion-option-button class="button-assertive" ng-click="ngCart.removeItemById(item.getId())">
