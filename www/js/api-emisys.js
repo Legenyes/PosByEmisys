@@ -1,7 +1,7 @@
 var api_url = "https://api.byemisys.com/pi.php";
 var api_test_url = "https://api-test.byemisys.com/pi.php";
-var app_id = 3;
-var event_id = 3;
+var app_id = 6;
+var event_id = 6;
 
 var ajax_stack = new Array();
 var ajax_timer = "";
@@ -32,6 +32,7 @@ function emisys_ajax(action, data, callback) {
         url: api_url,
         data: $data,
         timeout: timeout,
+        crossDomain : true,
         async: true,
         success: function (msg) {
             clearTimeout(ajax_timer);

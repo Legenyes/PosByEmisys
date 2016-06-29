@@ -9,6 +9,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
             $scope.customers = nfcService.get();
             $scope.cardUid = "";
             $scope.posId = 43;
+            $scope.terminal_id = "POS_DEMO";
 
             $scope.loadProducts = function () {
                 console.log("begin load product");
@@ -106,24 +107,23 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
                 // convert deciaml to hexa and reverse block of tow char
                 var cardUid = Number(strScanned).toString(16).match(/../g).reverse().join("");
                 console.log(cardUid);
-                
-                if(cardUid.length!=8)
+
+                if (cardUid.length != 8)
                     alert("Impossible de lire la carte");
-                else                    
-                    $scope.debitCard(cardUid);
+                else
+                    $scope.prepareTransaction(cardUid);
             };
-            
-            $scope.debitCard = function (cardUid) {                
+
+            $scope.prepareTransaction = function (cardUid) {
                 var $data = new Array();
-                emisys_ajax("app_register_card_by_cardnumber", $data, function (msg) {
-                    if (msg.status == "OK" || msg.status == "CARD_004") {
-                        alert(msg.status);
-                    } else {
-                        alert(msg.error_msg);
-                    }
-                });
+                $data.card_uid = cardUid;
+                $data.terminal_id = $scope.terminal_id;
+                emisys_ajax("card_solde", $data, function (msg) {
+                    console.log(msg);
+                });             
+
             }
-            
+
             $scope.closePaymentModal = function () {
                 $scope.modalPayment.hide();
             };

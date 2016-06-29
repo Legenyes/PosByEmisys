@@ -34,13 +34,13 @@
     background-color: #36bc9b;
     padding-top: 10px;
     padding-bottom: 10px;
-
-    height: 100px;
-    color: black;
+    height: 70px;
+    color: white;
     font-weight: bold;
     font-size: 35px;
     width: 100%;
-}
+    border-radius: 6px;
+}}
 
 .tabs-top > .tabs,
 .tabs.tabs-top{
@@ -96,4 +96,12 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
     border-radius: 10px;
     font-size: 20px;
     font-weight: bold;
-} 
+}
+
+.item-complex .item-content,
+.item-radio .item-content{
+    padding: 10px 16px 10px 16px;
+}
+.item-complex.item-icon-right .item-content{
+    padding-right: 16px!important;
+}

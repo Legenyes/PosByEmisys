@@ -5,17 +5,22 @@
 <ion-list>
     <ion-item class="item-remove-animate item-icon-right" ng-repeat="item in ngCart.getCart().items track by $index" >
         <div style="width: auto; float: left"><span class="button">{{ item.getName()}}</span></div> 
-        <div style="width: 90px; float: right; text-align:right"><span class="button ">{{ (item.getTotal() | number:2)}}</span></div>
-        <div style="float: right">
-            <span class="button btn-default  icon ion-minus"
-                  ng-click="item.setQuantity(-1, true)"></span>
-            <span class="button">{{ item.getQuantity() | number}}</span>
+        
+        
+        <div style="width: auto; float: right; text-align:right; margin-left: 5px;">
+            <span class="button button-price">{{ (item.getTotal() | number:2)}}</span>
+            <span class="button button-number btn-default " ng-click="item.setQuantity(-1, true)"><div class="icon ion-minus"></div>  </span>
         </div>
+        <div style="float: right">            
+            <span class="button button-price">{{ item.getQuantity() | number}}</span>
+        </div>               
+        
         <ion-option-button class="button-assertive" ng-click="ngCart.removeItemById(item.getId())">
             Delete
         </ion-option-button>
     </ion-item>
 </ion-list>
+
 
 
 <style>
