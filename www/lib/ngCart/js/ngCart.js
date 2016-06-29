@@ -261,7 +261,7 @@ angular.module('ngCart', ['ngCart.directives'])
                     var quantityInt = parseInt(quantity);
                     if (quantityInt % 1 === 0) {
                         if (relative === true) {
-                            this._quantity += quantityInt;
+                            this._quantity += 1;
                         } else {
                             this._quantity = quantityInt;
                         }
