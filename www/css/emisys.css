@@ -40,7 +40,7 @@
     font-size: 35px;
     width: 100%;
     border-radius: 6px;
-}}
+}
 
 .tabs-top > .tabs,
 .tabs.tabs-top{
@@ -105,3 +105,11 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
 .item-complex.item-icon-right .item-content{
     padding-right: 16px!important;
 }
+.button-number{
+    color: rgb(219, 68, 84);
+    font-size: 16px;
+}
+.item-icon-right .icon.icon-minus {
+    right: 8px;
+}
+

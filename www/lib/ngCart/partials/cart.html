@@ -9,10 +9,10 @@
         
         <div style="width: auto; float: right; text-align:right; margin-left: 5px;">
             <span class="button button-price">{{ (item.getTotal() | number:2)}}</span>
-            <span class="button button-number btn-default " ng-click="item.setQuantity(-1, true)"><div class="icon ion-minus"></div>  </span>
+            <span class="button button-delete btn-default " ng-click="item.setQuantity(-1, true)"><div class="icon ion-minus"></div>  </span>
         </div>
         <div style="float: right">            
-            <span id="qtt-{{ item.getId()}}" class="button button-price">{{ item.getQuantity() | number}}</span>
+            <span id="qtt-{{ item.getId()}}" class="button button-number">{{ item.getQuantity() | number}}</span>
         </div>               
         
         <ion-option-button class="button-assertive" ng-click="ngCart.removeItemById(item.getId())">
