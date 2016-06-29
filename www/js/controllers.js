@@ -120,7 +120,15 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
                 $data.terminal_id = $scope.terminal_id;
                 emisys_ajax("card_solde", $data, function (msg) {
                     console.log(msg);
-                });             
+
+                    
+                    $customer = {
+                        'cardUid': cardUid,
+                        'amount': msg.CURRENT_VALUE
+                    };
+                    $scope.customers.push($customer);
+                    $scope.$apply();
+                });
 
             }
 

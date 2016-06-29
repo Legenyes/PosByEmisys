@@ -24,7 +24,7 @@ function emisys_ajax(action, data, callback) {
     $data.action = action;
     $data.app_id = app_id;
     $data.event_id = event_id;
-    $data.test = 1;
+    //$data.test = 1;
 
     var xhr = $.ajax({
         dataType: "json",

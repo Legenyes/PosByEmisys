@@ -105,11 +105,29 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
 .item-complex.item-icon-right .item-content{
     padding-right: 16px!important;
 }
-.button-number{
-    color: rgb(219, 68, 84);
-    font-size: 16px;
+.button-number{ 
+    color: rgb(255, 255, 255); 
+    background-color: rgb(54, 188, 155); 
 }
 .item-icon-right .icon.icon-minus {
     right: 8px;
 }
 
+.button-title {
+    background-color: transparent;
+    padding-left:0px;
+}
+
+.button-delete {
+    color: rgb(219, 68, 84);
+    font-size: 16px;
+    border: 1px solid rgb(219, 68, 84);
+}
+
+.item-icon-right .icon.ion-minus {
+    right: 8px!important;
+}
+.button-price{
+ min-width:80px;
+ border: 1px solid rgb(51, 51, 51);
+}
