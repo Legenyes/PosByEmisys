@@ -46,7 +46,8 @@ angular.module('ngCart', ['ngCart.directives'])
                     if (typeof inCart === 'object') {
                         //Update quantity of an item if it's already in the cart
                         inCart.setQuantity(quantity, true);
-						jQuery(".scroll-view.ionic-scroll.scroll-y").scrollTop(jQuery("#qtt-"+id).parent().parent().parent().position().top);
+						if((jQuery("#qtt-"+id).parent().parent().parent().position().top - 650) > 0)
+							jQuery("#basketScroll > .scroll").attr('style','transform: translate3d(0px, -'+(jQuery("#qtt-"+id).parent().parent().parent().position().top-650)+'px, 0px) scale(1);');
 						jQuery("#qtt-"+id).parent().parent().css("background-color","#eeeeee");
 						setTimeout(function() {
 							jQuery("#qtt-"+id).parent().parent().css("background-color","#ffffff");
@@ -56,7 +57,7 @@ angular.module('ngCart', ['ngCart.directives'])
                         var newItem = new ngCartItem(id, name, price, quantity, data);
                         this.$cart.items.unshift(newItem);
                         $rootScope.$broadcast('ngCart:itemAdded', newItem);
-						jQuery(".scroll-view.ionic-scroll.scroll-y").scrollTop(0);
+						jQuery(".scroll-view.ionic-scroll.scroll-y").attr('style','transform: translate3d(0px, 0px, 0px) scale(1);');
                     }
 
                     $rootScope.$broadcast('ngCart:change', {});
