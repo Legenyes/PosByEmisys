@@ -1,8 +1,9 @@
-var nfc = {
-    addTagIdListener: function (success, failure) {
-        cordova.exec(success, failure, "NfcAcr122Plugin", "listen", []);
-    }
-}
+/*var nfc = {
+ addTagIdListener: function (success, failure) {
+ cordova.exec(success, failure, "NfcAcr122Plugin", "listen", []);
+ }
+ }
+ */
 
 var currentCardUid = "";
 var inPayementProcess = false;
@@ -32,11 +33,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
                 var failure = function (reason) {
                     currentCardUid = "";/*
-                    document.getElementById("debug").innerHtml = reason;
-                    navigator.notification.alert("Error " + JSON.stringify(reason), function () {}, "NFC Tag ID");
-                    alert("Error " + JSON.stringify(reason))*/
+                     document.getElementById("debug").innerHtml = reason;
+                     navigator.notification.alert("Error " + JSON.stringify(reason), function () {}, "NFC Tag ID");
+                     alert("Error " + JSON.stringify(reason))*/
                 };
-                
+
                 nfc.addTagIdListener(success, failure);
             });
         })
@@ -98,5 +99,38 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             // if none of the above states are matched, use this as the fallback
             $urlRouterProvider.otherwise('/tab/basket');
 
-        });
+        })
 
+        .directive('capitalize', function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, element, attrs, modelCtrl) {
+                    var capitalize = function (inputValue) {
+                        if (inputValue == undefined)
+                            inputValue = '';
+                        var capitalized = inputValue.toUpperCase();
+                        if (capitalized !== inputValue) {
+                            modelCtrl.$setViewValue(capitalized);
+                            modelCtrl.$render();
+                        }
+                        return capitalized;
+                    }
+                    modelCtrl.$parsers.push(capitalize);
+                    capitalize(scope[attrs.ngModel]); // capitalize initial value
+                }
+            };
+        })
+        .directive('ngEnter', function () {
+            return function (scope, element, attrs) {
+                element.bind("keydown keypress", function (event) {
+                    if (event.which === 13) {
+                        scope.$apply(function () {
+                            scope.$eval(attrs.ngEnter, {'event': event});
+                        });
+
+                        event.preventDefault();
+                    }
+                });
+            };
+        });
+;

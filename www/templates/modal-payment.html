@@ -4,6 +4,10 @@
             <img src="img/scan.png" style="margin: auto">
         </div>
         
+        <form ng-submit="checkCardUid(cardUid)">
+            <input type="password" name="cardUid" ngEnter="checkCardUid(cardUid)" ng-model="cardUid" id="cardUid" ng-blur="cardUidBLur" capitalize />
+        </form>
+        
         <ion-scroll style="height: 45%;">
             <div id="listCustomers">
                 <ion-list class="listCustomers">
@@ -16,8 +20,8 @@
         </ion-scroll>
         
         <div style="position: absolute; width: 100%; bottom: 0;">
-            <button class="button button-full button-balanced " ng-class="{disabled: resteAPayer > 0}"role="alert" >
-                Reste a payer {{ (resteAPayer | number:2) + " €"}}
+            <button class="button button-full button-balanced " ng-click="closePaymentModal()" ng-class="{disabled: resteAPayer > 0}"role="alert" >
+                Reste a payer {{ (resteAPayer) + " Jetons"}}
             </button>
         </div>
     </div>
