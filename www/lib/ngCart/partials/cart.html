@@ -15,7 +15,7 @@
             <span id="qtt-{{ item.getId()}}" class="button button-number">{{ item.getQuantity() | number}}</span>
         </div>               
         
-        <ion-option-button class="button-assertive" ng-click="ngCart.removeItemById(item.getId())">
+        <ion-option-button class="button-assertive" ng-click="ngCart.removeItemById(item.getId());item.setQuantity(0, true)">
             Delete
         </ion-option-button>
     </ion-item>

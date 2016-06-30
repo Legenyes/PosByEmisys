@@ -32,7 +32,7 @@
 }
 .button.button-big, .button.button-balanced {
     background-color: #36bc9b;
-    padding-top: 10px;
+    padding-top: 9px;
     padding-bottom: 10px;
     height: 70px;
     color: white;
@@ -41,6 +41,14 @@
     width: 100%;
     border-radius: 6px;
 }
+.button.button-balanced.red {
+	background-color: rgb(219, 68, 84);
+}
+.modal .button.button-balanced {
+    padding-top: 0px;
+	margin-bottom: 0;
+	border-radius: 0;
+}
 
 .tabs-top > .tabs,
 .tabs.tabs-top{
@@ -48,9 +56,6 @@
 }
 .has-tabs-top {
     top: 70px;
-}
-.view-container{
-    border-bottom: 10px solid #db4454;
 }
 .tab-nav.tabs {
     background-color: #db4454;
@@ -83,7 +88,10 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
     border-radius:6px;
     margin-bottom: 10px;
 }
-.listCustomers {   }
+#basketScroll .item{
+	background-color: transparent;
+}
+.listCustomers { max-height:295px;overflow:hidden; }
 .item-small { padding: 0px; width: 95%; margin: 5px auto }
 
 #cardUid {     
@@ -130,4 +138,43 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
 .button-price{
  min-width:80px;
  border: 1px solid rgb(51, 51, 51);
+}
+.addToCartItem {
+	position: absolute;    
+	bottom: 0px;   
+	background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;    
+	height: 30px;    
+	padding: 4px;    
+	color: white;
+	text-align: center;
+}
+#cart_list .item {
+	border: 0;
+	text-align: left;
+	padding: 0 0 0 10px;
+	background-color:transparent;
+	margin-bottom: 5px;
+}
+#cart_list {
+	text-align: center;
+	margin-top: 20px;
+	width: 50%;
+	float: left;
+	border: 0;
+	padding: 0 10px;
+}
+#cart_list > div {
+	border: 1px solid #666;
+}
+.modal {
+    top: 0;
+	right: 0;
+	left: 0;
+	width: 100%;
+	position: relative;
+}
+.modal-wrapper {
+    width: 60%;
+    margin: 70px auto 0;
 }

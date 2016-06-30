@@ -46,18 +46,23 @@ angular.module('ngCart', ['ngCart.directives'])
                     if (typeof inCart === 'object') {
                         //Update quantity of an item if it's already in the cart
                         inCart.setQuantity(quantity, true);
-						if((jQuery("#qtt-"+id).parent().parent().parent().position().top - 650) > 0)
-							jQuery("#basketScroll > .scroll").attr('style','transform: translate3d(0px, -'+(jQuery("#qtt-"+id).parent().parent().parent().position().top-650)+'px, 0px) scale(1);');
-						jQuery("#qtt-"+id).parent().parent().css("background-color","#eeeeee");
+						if((jQuery("#qtt-"+id).parent().parent().parent().position().top - 455) > 0) {
+							jQuery("#basketScroll > .scroll").attr('style','transform: translate3d(0px, -'+(jQuery("#qtt-"+id).parent().parent().parent().position().top-455)+'px, 0px) scale(1);');
+						}	
+						else
+							jQuery("#basketScroll > .scroll").attr('style','transform: translate3d(0px, 0px, 0px) scale(1);');
+						jQuery("#qtt-"+id).parent().parent().css("background-color","rgba(255,255,255,0.6)");
+						jQuery("#qtt-"+id).css("background-color","#6EE0C2");
 						setTimeout(function() {
-							jQuery("#qtt-"+id).parent().parent().css("background-color","#ffffff");
-						},700);
-						jQuery("#qtt-"+id).animate({'font-size':'27px'}).animate({'font-size':'16px'});
+							jQuery("#basketScroll .item-content").css("background-color","#ffffff");
+							jQuery("#basketScroll .item-content .button-number").css("background-color","#36BC9B");
+						},800);
+						jQuery("#qtt-"+id).stop(true,true).animate({'font-size':'28px'}).animate({'font-size':'16px'});
                     } else {
                         var newItem = new ngCartItem(id, name, price, quantity, data);
                         this.$cart.items.unshift(newItem);
                         $rootScope.$broadcast('ngCart:itemAdded', newItem);
-						jQuery(".scroll-view.ionic-scroll.scroll-y").attr('style','transform: translate3d(0px, 0px, 0px) scale(1);');
+						jQuery("#basketScroll > .scroll").attr('style','transform: translate3d(0px, 0px, 0px) scale(1);');
                     }
 
                     $rootScope.$broadcast('ngCart:change', {});
