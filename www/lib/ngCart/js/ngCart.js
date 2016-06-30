@@ -16,7 +16,7 @@ angular.module('ngCart', ['ngCart.directives'])
 
                 $rootScope.$on('ngCart:change', function () {
                     ngCart.clearCart();
-                    ngCart.$save();
+                    ngCart.$save(); 
                 });
 
                 if (angular.isObject(store.get('cart'))) {

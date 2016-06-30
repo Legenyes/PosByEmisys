@@ -99,7 +99,6 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
             };
             $scope.cardUidBLur = function ()
             {
-                alert("tes");
             };
             $scope.checkCardUid = function (strScanned)
             {
@@ -115,25 +114,53 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
             };
 
             $scope.prepareTransaction = function (cardUid) {
+                if ($scope.resteAPayer == 0)
+                    return;
+
                 var $data = new Array();
                 $data.card_uid = cardUid;
                 $data.terminal_id = $scope.terminal_id;
                 emisys_ajax("card_solde", $data, function (msg) {
                     console.log(msg);
+                    if (msg != false && msg.CURRENT_VALUE > 0)
+                    {
+                        var soldeCard = msg.CURRENT_VALUE;
+                        var amount = 0;
+                        if (soldeCard >= $scope.resteAPayer)
+                            amount = parseInt($scope.resteAPayer, 10);
+                        else
+                            amount = parseInt(soldeCard, 10);
 
-                    
-                    $customer = {
-                        'cardUid': cardUid,
-                        'amount': msg.CURRENT_VALUE
-                    };
-                    $scope.customers.push($customer);
-                    $scope.$apply();
+                        // TODO TEST DONT ALREADY IN LIST
+                        $customer = {
+                            'cardUid': cardUid,
+                            'solde': parseInt(soldeCard, 10),
+                            'soldeApres': parseInt(soldeCard - amount, 10),
+                            'amount': amount
+                        };
+                        $scope.dejaPaye += amount;
+                        console.log($scope.dejaPaye);
+                        console.log($scope.aPayer);
+                        $scope.resteAPayer = $scope.aPayer - $scope.dejaPaye;
+                        $scope.customers.push($customer);
+                        $scope.$apply();
+                    }
                 });
 
             }
 
-            $scope.closePaymentModal = function () {
+            $scope.validatePaymentModal = function () {
+                var $data = new Array();
+                $data.card_uid = cardUid;
+                $data.terminal_id = $scope.terminal_id;
+
+                $scope.aPayer = 0;
+                $scope.dejaPaye = 0;
+                $scope.resteAPayer = 0;
+                $scope.customers = [];
+                ngCart.empty();
                 $scope.modalPayment.hide();
+
             };
             // Cleanup the modal when we're done with it!
             $scope.$on('$destroy', function () {

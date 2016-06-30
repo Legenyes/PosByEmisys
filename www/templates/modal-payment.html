@@ -12,15 +12,15 @@
             <div id="listCustomers">
                 <ion-list class="listCustomers">
                     <ion-item class="item-small" ng-repeat="item in customers" >
-                        <div style="width: auto; float: left"><span class="button">{{ item.cardUid}}</span></div> 
-                        <div style="width: 90px; float: right; text-align:right"><span class="button ">{{ (item.amount) + " jETONS"}}</span></div>
+                        <div style="width: auto; float: left"><span class="button">Card # {{$index + 1}}</span></div> 
+                        <div style="width: 300px; float: right; text-align:right"><span class="button ">{{ item.solde }}<strong>-{{ (item.amount) + " J."}}</strong> (nouveau solde {{ item.soldeApres }}J.)</span></div>
                     </ion-item>
                 </ion-list>
             </div>   
         </ion-scroll>
         
         <div style="position: absolute; width: 100%; bottom: 0;">
-            <button class="button button-full button-balanced " ng-click="closePaymentModal()" ng-class="{disabled: resteAPayer > 0}"role="alert" >
+            <button class="button button-full button-balanced " ng-click="validatePaymentModal()" ng-class="{disabled: resteAPayer > 0}" role="alert" >
                 Reste a payer {{ (resteAPayer) + " Jetons"}}
             </button>
         </div>
