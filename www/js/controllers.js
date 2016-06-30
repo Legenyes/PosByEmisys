@@ -10,6 +10,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
             $scope.cardUid = "";
             $scope.posId = 43;
             $scope.terminal_id = "POS_DEMO";
+			$scope.cart = ngCart.getCart().items;
 
             $scope.loadProducts = function () {
                 console.log("begin load product");
@@ -91,7 +92,6 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
                 focusFirstInput: true
             }).then(function (modal) {
                 $scope.modalPayment = modal;
-
             });
             $scope.showPaymentModal = function () {
                 $scope.modalPayment.show();
@@ -104,16 +104,23 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
             $scope.checkCardUid = function (strScanned)
             {
                 document.getElementById("cardUid").value = "";
-                // convert deciaml to hexa and reverse block of tow char
+               
+                var find = ["&","é","\"","'","(","§","è","!","ç","à"];
+				var replace = ["1","2","3","4","5","6","7","8","9","0"];
+				for(var c in strScanned) {
+					for(var i in find) {
+						strScanned = strScanned.replace(find[i] ,replace[i]);
+					}
+				}
+				// convert deciaml to hexa and reverse block of tow char
                 var cardUid = Number(strScanned).toString(16).match(/../g).reverse().join("");
-                console.log(cardUid);
 
                 if (cardUid.length != 8)
                     alert("Impossible de lire la carte");
                 else
                     $scope.prepareTransaction(cardUid);
             };
-
+			
             $scope.prepareTransaction = function (cardUid) {
                 var $data = new Array();
                 $data.card_uid = cardUid;
