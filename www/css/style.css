@@ -1,7 +1,7 @@
 .scroll-view.scroll-y 
 {
     overflow-y: auto;
-	max-height: 575px;
+	max-height: 460px;
 }
 .bar.bar-stable {
     background-image: none;

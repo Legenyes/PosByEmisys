@@ -8,9 +8,12 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
             $scope.resteAPayer = $scope.aPayer - $scope.dejaPaye;
             $scope.customers = nfcService.get();
             $scope.cardUid = "";
+			$scope.payed = 0;
             $scope.posId = 43;
             $scope.terminal_id = "POS_DEMO";
 			$scope.cart = ngCart.getCart().items;
+			$scope.hist = [];
+			$scope.modHisto = [];
 
             $scope.loadProducts = function () {
                 console.log("begin load product");
@@ -19,35 +22,32 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
                 $http({
                     method: 'GET',
                     url: url
-                }).
-                        then(
-                                function (response) {
-                                    var log = [];
-                                    angular.forEach(response.data, function (value, key) {
-                                        var price = value.formule_item[0].quantity;
-                                        var picture = 'http://fakeimg.pl/200x200/?text=' + value.name;
-                                        if (value.picture != null)
-                                            picture = 'https://eventware.lasemo.be/uploads/documents/' + value.picture.name;
-                                        $product = {
-                                            'id': value.id,
-                                            'name': value.name,
-                                            'isOnSite': value.is_on_site,
-                                            'price': parseInt(value.price_with_vat) >= 0 ? parseInt(price) : 0,
-                                            'picture': picture
-                                        };
-                                        this.push($product);
-                                    }, $scope.products);
-                                },
-                                function (response) {
-                                    console.log(response.data);
-                                    console.log(response.status);
-                                    console.log(response.statusText);
-                                    console.log(response.config.timeout);
-
-                                }
-                        );
-
-
+                })
+				.then(
+					function (response) {
+						var log = [];
+						angular.forEach(response.data, function (value, key) {
+							var price = value.formule_item[0].quantity;
+							var picture = 'http://fakeimg.pl/200x200/?text=' + value.name;
+							if (value.picture != null)
+								picture = 'https://eventware.lasemo.be/uploads/documents/' + value.picture.name;
+							$product = {
+								'id': value.id,
+								'name': value.name,
+								'isOnSite': value.is_on_site,
+								'price': parseInt(value.price_with_vat) >= 0 ? parseInt(price) : 0,
+								'picture': picture
+							};
+							this.push($product);
+						}, $scope.products);
+					},
+					function (response) {
+						console.log(response.data);
+						console.log(response.status);
+						console.log(response.statusText);
+						console.log(response.config.timeout);
+					}
+				);
             }
 
             $scope.$on('ngCart:change', function (event, data) {
@@ -94,14 +94,30 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
                 $scope.modalPayment = modal;
             });
             $scope.showPaymentModal = function () {
+				$scope.cart = ngCart.getCart().items;
                 $scope.modalPayment.show();
                 focus("modalPayment");
             };
+			
+			$ionicModal.fromTemplateUrl('templates/modal-history.html', {
+                scope: $scope,
+                animation: 'slide-in-up',
+                focusFirstInput: true
+            }).then(function (modal) {
+                $scope.modalHistory = modal;
+            });
+            $scope.showHistoryModal = function (index) {
+				$scope.modHisto = $scope.hist[index];
+                $scope.modalHistory.show();
+                focus("modalHistory");
+            };
+			
             $scope.cardUidBLur = function ()
             {
             };
             $scope.checkCardUid = function (strScanned)
             {
+				console.log("checkCardUid");
                 document.getElementById("cardUid").value = "";
                
                 var find = ["&","é","\"","'","(","§","è","!","ç","à"];
@@ -121,6 +137,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
             };
 			
             $scope.prepareTransaction = function (cardUid) {
+				console.log("prepareTransaction");
                 if ($scope.resteAPayer == 0)
                     return;
 
@@ -128,54 +145,68 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
                 $data.card_uid = cardUid;
                 $data.terminal_id = $scope.terminal_id;
                 emisys_ajax("card_solde", $data, function (msg) {
-                    console.log(msg);
                     if (msg != false && msg.CURRENT_VALUE > 0)
                     {
-                        var soldeCard = msg.CURRENT_VALUE;
+                        $scope.soldeCard = msg.CURRENT_VALUE;
                         var amount = 0;
-                        if (soldeCard >= $scope.resteAPayer)
-                            amount = parseInt($scope.resteAPayer, 10);
-                        else
-                            amount = parseInt(soldeCard, 10);
-
-                        // TODO TEST DONT ALREADY IN LIST
-                        $customer = {
-                            'cardUid': cardUid,
-                            'solde': parseInt(soldeCard, 10),
-                            'soldeApres': parseInt(soldeCard - amount, 10),
-                            'amount': amount
-                        };
-                        $scope.dejaPaye += amount;
-                        console.log($scope.dejaPaye);
-                        console.log($scope.aPayer);
-                        $scope.resteAPayer = $scope.aPayer - $scope.dejaPaye;
-                        $scope.customers.push($customer);
-                        $scope.$apply();
+						if ($scope.soldeCard >= $scope.resteAPayer) amount = parseInt($scope.resteAPayer, 10);
+						else amount = parseInt($scope.soldeCard, 10);
+						$customer = {
+							'cardUid': cardUid,
+							'solde': parseInt($scope.soldeCard, 10),
+							'soldeApres': parseInt($scope.soldeCard - amount, 10),
+							'amount': amount,
+							'firstname': msg.FIRST_NAME,
+							'lastname': msg.LAST_NAME
+						};
+						$scope.customers.push($customer);
+						
+                        if ($scope.soldeCard >= $scope.resteAPayer) { // loop on customer when all is payed and debit cards
+							for(cus in $scope.customers) {
+								$data.amount = amount;
+								$data.session = [];
+								$data.card_uid = $scope.customers[cus].cardUid;
+								emisys_ajax("debit_card", $data, function (msg) {
+									if(msg.message=="200") {
+										$scope.aPayer = 0;
+										$scope.dejaPaye = 0;
+										$scope.resteAPayer = 0;
+										$scope.payed = 1;
+										if($scope.customers.length == (parseInt(cus)+1)) { // apply scope when all the ajax call are done
+											$scope.$apply();
+											$hist = {
+												'customers': $scope.customers,
+												'cart': $scope.cart
+											};
+											$scope.hist.unshift($hist);
+										}	
+									}
+								});
+							}	
+						}
+                        else { // if resteAPAyer is not null
+							$scope.dejaPaye += amount;
+							$scope.card_uid = cardUid;
+							$scope.resteAPayer = $scope.aPayer - $scope.dejaPaye;
+							$scope.$apply();
+						}	
                     }
                 });
 
             }
-
-            $scope.validatePaymentModal = function () {
-                var $data = new Array();
-                $data.card_uid = cardUid;
-                $data.terminal_id = $scope.terminal_id;
-
-                $scope.aPayer = 0;
-                $scope.dejaPaye = 0;
-                $scope.resteAPayer = 0;
-                $scope.customers = [];
-                ngCart.empty();
-                $scope.modalPayment.hide();
-
-            };
+			
             // Cleanup the modal when we're done with it!
             $scope.$on('$destroy', function () {
                 $scope.modalPayment.remove();
             });
             // Execute action on hide modal
             $scope.$on('modal.hidden', function () {
-                // Execute action
+                if($scope.payed==1) {
+					$scope.customers = [];
+					$scope.cart = [];
+					ngCart.empty();
+					$scope.payed = 0;
+				}
             });
             // Execute action on remove modal
             $scope.$on('modal.removed', function () {
