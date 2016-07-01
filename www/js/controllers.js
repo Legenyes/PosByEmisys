@@ -15,7 +15,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
             $scope.loadProducts = function () {
                 console.log("begin load product");
                 //var url = "controllers.js"
-                var url = "https://eventware.lasemo.be/api/formules/list?isOnSite=1&project=9&item_isCashlessUnit=1&sort=formule.id&dir=ASC&pos=" + $scope.posId;
+                var url = "https://eventware.lasemo.be/api/formules/list?isOnSite=1&project=9&item_isCashlessUnit=1&pos=" + $scope.posId;
                 $http({
                     method: 'GET',
                     url: url
@@ -160,6 +160,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
                 var $data = new Array();
                 $data.card_uid = cardUid;
                 $data.terminal_id = $scope.terminal_id;
+
 
                 $scope.aPayer = 0;
                 $scope.dejaPaye = 0;
