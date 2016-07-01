@@ -1,12 +1,12 @@
 <ion-scroll id="basketScroll" ng-init="refreshBasketScroll()" >
-    <div class = "row  responsive-sm">
-        <div class = "col">
+    <div class="row responsive-sm">
+        <div class="col">
             <ngcart-cart></ngcart-cart>
         </div>
     </div> 
 </ion-scroll>
 
 
-<button ng-click="showPaymentModal()" class="button button-full button-balanced" role="alert" >
+<button ng-click="showPaymentModal()" ng-show="aPayer>0" class="button button-full button-balanced" role="alert" >
     Payer {{ (aPayer) + " Jetons"}}
 </button>

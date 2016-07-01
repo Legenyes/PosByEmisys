@@ -1,0 +1,37 @@
+<ion-modal-view>
+    <div style="position: relative; height:100%">   
+		<div style="text-align:center;margin:20px 0 15px 0;width:100%;" id="cart_list">  
+			<div style="margin:0 auto;width:50%;">
+				<h3>Commande</h3>
+				<ion-list>
+					<ion-item ng-repeat="item in modHisto.cart | orderBy:'-getQuantity()'" >
+						<b>{{ item.getQuantity() | number}}</b> <span>{{ item.getName()}}</span>             
+					</ion-item>
+				</ion-list>
+			</div>
+        </div>
+        
+		<ion-scroll style="max-height:295px;width:100%;"> 
+			<table id="listCustomers">
+				<tr>
+				   <th>Carte #</th>
+				   <th>Client</th>
+				   <th>Dépensé</th>
+				   <th>Solde</th>
+			   </tr>
+				<tr ng-repeat="item in modHisto.customers" >
+					<td>{{item.cardUid}}</td> 
+					<td>{{item.firstname}} {{item.lastname}}</td> 
+					<td>-{{item.amount}} J.</td>
+					<td><strong>{{ item.soldeApres }} J.</strong></td>
+                </tr>
+			</table>
+		</ion-scroll>
+        
+        <div style="width: 100%;">
+			<button class="button button-full button-balanced green" ng-click="modalHistory.hide()" role="alert" >
+                Fermer
+            </button>
+        </div>
+    </div>
+</ion-modal-view>

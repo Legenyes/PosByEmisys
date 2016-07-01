@@ -40,7 +40,7 @@ angular.module('ngCart', ['ngCart.directives'])
                 };
 
                 this.addItem = function (id, name, price, quantity, data) {
-
+					
                     var inCart = this.getItemById(id);
 
                     if (typeof inCart === 'object') {

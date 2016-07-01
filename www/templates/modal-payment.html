@@ -1,7 +1,7 @@
 <ion-modal-view>
     <div style="position: relative; height:100%">   
         <div style="text-align:center;margin-top:20px;width:50%;float:left;">  
-            <img class="scanme" src="img/scan.png" style="margin: auto" />
+            <img class="scanme" src="img/scan{{resteAPayer==0?'-green':''}}.png" style="margin: auto" />
 			<p style="font-size: 19px; margin-top: 32px; font-weight: bold;">Scanner la carte pour payer</p>
         </div>
 		<div style="text-align:center;margin-top:20px;width:50%;float:left;" id="cart_list">  
@@ -19,21 +19,32 @@
             <input type="password" name="cardUid" ngEnter="checkCardUid(cardUid)" ng-model="cardUid" id="cardUid" ng-blur="cardUidBLur" />
         </form>
         
-		<ion-scroll style="max-height:295px;">
-            <div id="listCustomers">
-                <ion-list class="listCustomers">
-                    <ion-item class="item-small" ng-repeat="item in customers" >
-                        <div style="width: auto; float: left"><span class="button">Card # {{$index + 1}}</span></div> 
-                        <div style="width: 300px; float: right; text-align:right"><span class="button ">{{ item.solde }}<strong>-{{ (item.amount) + " J."}}</strong> (nouveau solde {{ item.soldeApres }}J.)</span></div>
-                    </ion-item>
-                </ion-list>
-            </div>   
+		<ion-scroll style="max-height:295px;"> 
+			<table id="listCustomers" ng-show="customers.length">
+				<tr>
+				   <th>Carte #</th>
+				   <th>Client</th>
+				   <th>Dépensé</th>
+				   <th>Solde</th>
+			   </tr>
+				<tr ng-repeat="item in customers" >
+					<td>{{item.cardUid}}</td> 
+					<td>{{item.firstname}} {{item.lastname}}</td> 
+					<td>-{{item.amount}} J.</td>
+					<td><strong>{{ item.soldeApres }} J.</strong></td>
+                </tr>
+			</table>
 		</ion-scroll>
         
-
         <div style="width: 100%;">
-            <button class="button button-full button-balanced {{resteAPayer>0 ? 'red' : 'green'}}" ng-click="closePaymentModal()" ng-class="{disabled: resteAPayer > 0}" role="alert" >
+            <button class="button button-full button-balanced red" ng-show="resteAPayer>0" role="alert" >
                 Reste à payer {{ (resteAPayer) + " Jetons"}}
+            </button>
+			<button class="button button-full button-balanced green" ng-show="resteAPayer==0&&payed!=1" ng-click="validatePaymentModal()" ng-class="{disabled: resteAPayer > 0}" role="alert" >
+                Payer la commande
+            </button>
+			<button class="button button-full button-balanced green" ng-show="payed==1" ng-click="modalPayment.hide()" role="alert" >
+                Commande payée
             </button>
         </div>
     </div>
