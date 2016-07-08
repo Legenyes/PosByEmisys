@@ -38,7 +38,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                      alert("Error " + JSON.stringify(reason))*/
                 };
 
-                nfc.addTagIdListener(success, failure);
+                //nfc.addTagIdListener(success, failure);
             });
         })
 
@@ -94,6 +94,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                                 controller: 'SettingsCtrl'
                             }
                         }
+                    })
+
+                    .state('tab.infos', {
+                        url: '/infos',
+                        views: {
+                            'tab-infos': {
+                                templateUrl: 'templates/tab-infos.html',
+                                controller: 'InfosCtrl'
+                            }
+                        }
                     });
 
             // if none of the above states are matched, use this as the fallback
@@ -133,16 +143,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 });
             };
         })
-		.directive('preventRightClick', [
-			function() {
-				return {
-					restrict: 'A',
-					link: function($scope, $ele) {
-						$ele.bind("contextmenu", function(e) {
-							e.preventDefault();
-						});
-					}
-				};
-			}
-		]);
+        
+        .directive('preventRightClick', [
+            function () {
+                return {
+                    restrict: 'A',
+                    link: function ($scope, $ele) {
+                        $ele.bind("contextmenu", function (e) {
+                            e.preventDefault();
+                        });
+                    }
+                };
+            }
+        ])
+        ;
 ;

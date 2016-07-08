@@ -1,0 +1,35 @@
+<ion-modal-view>
+    <div style="position: relative; height:100%">   
+        <div style="text-align:center;margin-top:20px;width:50%;float:left;">  
+            <img class="scanme" src="img/scan-green.png" style="margin: auto" />
+			<p style="font-size: 19px; margin-top: 32px; font-weight: bold;">Scanner la carte</p>
+        </div>
+		<div style="text-align:center;margin-top:20px;width:50%;float:left;" id="cart_list">  
+        </div>
+        
+        <form ng-submit="checkCardUid(cardUid2)">
+            <input type="password" name="cardUid2" ngEnter="checkCardUid(cardUid2)" ng-model="cardUid2" id="cardUid2" ng-blur="cardUidBLur" />
+        </form>
+        
+		<ion-scroll style="max-height:295px;"> 
+			<table id="listCustomers" ng-show="customers.length">
+				<tr>
+				   <th>Carte #</th>
+				   <th>Client</th>
+				   <th>Solde</th>
+			   </tr>
+				<tr ng-repeat="item in customers" >
+					<td>{{item.emisys_number }}</td> 
+					<td>{{item.firstname}} {{item.lastname}}</td> 
+					<td><strong>{{ item.solde }} J.</strong></td>
+                </tr>
+			</table>
+		</ion-scroll>
+        
+        <div style="width: 100%;">
+            <button class="button button-full button-balanced green"  ng-click="modalInfo.hide()" role="alert" >
+                Fermer
+            </button>
+        </div>
+    </div>
+</ion-modal-view>

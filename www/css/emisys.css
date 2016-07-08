@@ -94,7 +94,7 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
 .listCustomers { max-height:295px;overflow:hidden; }
 .item-small { padding: 0px; width: 95%; margin: 5px auto }
 
-#cardUid {     
+#cardUid, #cardUid2 {     
     /*border: 1px solid black;*/
     color: white;
     width: 90%;
@@ -196,7 +196,17 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
 #history .item {
 	padding: 0px 0 0 10px;
 	margin: 5px 10px;
+        width: 46%;
+        float: left;
 }
 #history .item .button {
-	min-height: 40px;
+	min-height: 30px;
+        line-height: 32px;
+}
+
+#catalogScroll.scroll-view.scroll-y 
+{ 
+    height: 572px;
+    max-height: 572px;
+    margin-bottom: 10px;
 }

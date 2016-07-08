@@ -28,7 +28,7 @@
 				   <th>Solde</th>
 			   </tr>
 				<tr ng-repeat="item in customers" >
-					<td>{{item.cardUid}}</td> 
+					<td>{{item.emisys_number }}</td> 
 					<td>{{item.firstname}} {{item.lastname}}</td> 
 					<td>-{{item.amount}} J.</td>
 					<td><strong>{{ item.soldeApres }} J.</strong></td>
@@ -40,7 +40,7 @@
             <button class="button button-full button-balanced red" ng-show="resteAPayer>0" role="alert" >
                 Reste à payer {{ (resteAPayer) + " Jetons"}}
             </button>
-			<button class="button button-full button-balanced green" ng-show="resteAPayer==0&&payed!=1" ng-click="validatePaymentModal()" ng-class="{disabled: resteAPayer > 0}" role="alert" >
+			<button class="button button-full button-balanced green" ng-show="resteAPayer==0&&payed!=1" ng-click="validatePaymentModal()" ng-class="{disabled: customers.length==0||resteAPayer > 0}" role="alert" >
                 Payer la commande
             </button>
 			<button class="button button-full button-balanced green" ng-show="payed==1" ng-click="modalPayment.hide()" role="alert" >
