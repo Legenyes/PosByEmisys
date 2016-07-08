@@ -1,6 +1,6 @@
-angular.module('starter.controllers', ['ngCart', 'ionic'])
+angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
 
-        .controller('BasketCtrl', function ($scope, ngCart, $ionicModal, $http, nfcService) {
+        .controller('BasketCtrl', ['$scope', 'ngCart', '$ionicModal', '$http', '$cookies', function ($scope, ngCart, $ionicModal, $http, $cookies) {
             $scope.products = [];
             $scope.productPerRow = 4;
             $scope.aPayer = ngCart.totalCost();
@@ -14,14 +14,17 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
                 $scope.posId = 43;
             $scope.terminal_id = "POS_DEMO";
             
+            var cookiesTerminal_id = $cookies.get('terminal_id');
+            if(cookiesTerminal_id!="" && cookiesTerminal_id!=null)
+                $scope.terminal_id = cookiesTerminal_id;
+            
+            console.log(cookiesTerminal_id);
             
             $scope.cart = ngCart.getCart().items;
             $scope.hist = [];
             $scope.modHisto = [];
 
             $scope.loadProducts = function () {
-                console.log("begin load product");
-                //var url = "controllers.js"
                 var url = "https://eventware.lasemo.be/api/formules/list?isOnSite=1&project=9&item_isCashlessUnit=1&pos=" + $scope.posId;
                 $http({
                     method: 'GET',
@@ -86,9 +89,10 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
                 ngCart.empty();
             }
 
+            /*
             nfcService.subscribe($scope, function customerAdded() {
                 $scope.$apply();
-            });
+            });*/
 
             $ionicModal.fromTemplateUrl('templates/modal-payment.html', {
                 scope: $scope,
@@ -268,7 +272,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic'])
 
             ngCart.setShipping(0);
             ngCart.setTaxRate(0);
-        })
+        }])
 
         .controller('ChatsCtrl', function ($scope, Chats) {
 
