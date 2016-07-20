@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title>PosByEmisys</title>
+
+        <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+        <link href="css/emisys.css" rel="stylesheet">
+
+    </head>
+    <body>
+
+        <div class="pane row  responsive-sm" style="padding-bottom: 75px;">
+            <div class="col col-50">   
+                <div id="customerBasket" class="list"></div>
+                <div id="customerCardInfo" class="hide"></div>
+            </div>
+            <div class = "col">
+                <div class='item item-complex' style="height:100%">
+                    <div class='item-content'>
+
+                    </div>
+                </div>
+
+                <div id="customerScanCard" class="hide">
+                    <img class="scanme" src="img/scan.png" />
+                </div>
+            </div>
+        </div>
+        <div id="customerFooter"></div>
+
+
+        <script src="js/jquery-1.8.3.min.js"></script>
+
+        <script>
+            window.addEventListener("message", receiveMessage, false);
+
+            function receiveMessage(event)
+            {
+                console.log(event.data.action);
+                if (event.data.action == "ngCart:change")
+                    refreshCustomerBasket(event.data);
+                else if (event.data.action == "paymentDialog:open")
+                    customerScanCard();
+                else if (event.data.action == "cardinfoDialog:open")
+                    customerCardInfo(event.data);
+                else if (event.data.action == "customers:add")
+                    customerAdd(event.data);
+            }
+
+            function customerAdd(data)
+            {
+                refreshCustomerBasket(data);
+
+                var customers = data.customers;
+                listItem = "<div class='item item-complex' ><div class='item-content'><table style='width:100%'>";
+                for (var i = 0; i < customers.length; i++) {
+                    listItem += "<tr>\n\
+                            <td>" + customers[i].emisys_number + "</td>\n\
+                            <td>" + customers[i].firstname + " " + customers[i].lastname + "</td>\n\
+                            <td>-" + customers[i].amount + "</td>\n\
+                            <td>" + customers[i].soldeApres + "</td>\n\
+                            </tr>";
+                }
+                listItem += "</table></div></div>";
+
+                $("#customerBasket").append(listItem);
+            }
+
+            function customerScanCard()
+            {
+                $("#customerScanCard").removeClass('hide');
+                $("#customerCardInfo").addClass('hide');
+            }
+
+            function customerCardInfo(data)
+            {
+                $("#customerBasket").addClass('hide');
+                $("#customerCardInfo").removeClass('hide');
+
+                var customer = data.customer;
+                var transactions = data.transactions;
+                listItem = "<div class='item item-complex' ><div class='item-content'>";
+                listItem += "<span class='pull-right'>";
+                listItem += "<span class='button button-number'>" + customer.solde + "</span>";
+                listItem += "</span>";
+                listItem += "<span class='button button-title'>" + customer.emisys_number + " (" + customer.firstname + " " + customer.lastname + ")</span>";
+                listItem += "</div></div>";
+
+                listItem += "<div class='item item-complex' ><div class='item-content'><table style='width:100%'>";
+                for (var i = 0; i < transactions.length; i++) {
+                    console.log(transactions[i]);
+                    if (transactions[i].TYPE == "C" || transactions[i].TYPE == "D")
+                    {
+                        var sign = "+"
+                        if (transactions[i].TYPE == "D")
+                            sign = "-";
+                        listItem += "<tr>\n\
+                            <td>" + transactions[i].TRANSACTION_DATE + "</td>\n\
+                            <td>" + transactions[i].TRANSACTION_TIME + "</td>\n\
+                            <td>" + transactions[i].TERMINAL_ID + "</td>\n\
+                            <td>" + sign + transactions[i].TRANSACTION_VALUE + "</td>\n\
+                            <td>" + transactions[i].CURRENT_VALUE + "</td>\n\
+                            </tr>";
+                    }
+                }
+                listItem += "</table></div></div>";
+
+                $("#customerCardInfo").html(listItem);
+            }
+
+            function refreshCustomerBasket(data)
+            {
+                $("#customerScanCard").addClass('hide');
+                $("#customerCardInfo").addClass('hide');
+                $("#customerBasket").removeClass('hide');
+
+                var items = data.items;
+                var resteAPayer = data.resteAPayer;
+
+                var table = "<table class='customerBasket'>";
+                var listItem = "";
+                for (var i = 0; i < items.length; i++) {
+                    table += "<tr><td class='picture'><img src='" + items[i]['_data']['picture'] + "' style='height:50px'></td>";
+                    table += "<td class='title'>" + items[i]['_name'] + "</td>";
+                    table += "<td class='quantity'>" + items[i]['_quantity'] + "</td>";
+                    table += "<td class='total'>" + items[i]['_price'] * items[i]['_quantity'] + "</td></tr>";
+
+                    listItem += "<div class='item item-complex' ><div class='item-content'>";
+
+                    listItem += "<span class='pull-right'>";
+                    listItem += "<span class='button button-number'>" + items[i]['_quantity'] + "</span>";
+                    listItem += "<span class='button button-price'>" + items[i]['_price'] * items[i]['_quantity'] + "</span>";
+                    listItem += "</span>";
+
+                    listItem += "<span class='picture'><img  src='" + items[i]['_data']['picture'] + "'></span>";
+                    listItem += "<span class='button button-title'>" + items[i]['_name'] + "</span>";
+
+                    listItem += "</div></div>";
+                }
+
+                if (items.length > 0) {
+                    listItem += "<div class='item item-complex' ><div class='item-content'>";
+
+                    listItem += "<span class='pull-right'>";
+                    var img = '<img class="scanme-little" src="img/scan.png" />';
+                    if (resteAPayer <= 0)
+                        img = '<img class="scanme-little" src="img/scan-green.png" />';
+
+                    listItem += "<span>" + img + "</span>";
+                    listItem += "<span class='button button-price'>" + resteAPayer + "</span>";
+                    listItem += "</span>";
+
+                    listItem += "<span class='picture'></span>";
+                    listItem += "<span class='button button-title'>Reste à payer</span>";
+
+                    listItem += "</div></div>";
+
+                    table += "</table>";
+                }
+
+                $("#customerBasket").html(listItem);
+            }
+
+        </script>
+    </body>
+</html>

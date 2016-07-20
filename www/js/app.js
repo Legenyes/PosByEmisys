@@ -7,6 +7,7 @@
 
 var currentCardUid = "";
 var inPayementProcess = false;
+var customerScreen = window.open('customer.html','Customer','height=768,width=1024,left=3000,top=0,menubar=0, resizable=0, scrollbars=0, status=0, titlebar=0,toolbar=0');
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 

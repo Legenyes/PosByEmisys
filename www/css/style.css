@@ -6,3 +6,5 @@
 .bar.bar-stable {
     background-image: none;
 }
+
+.pull-right { float: right }

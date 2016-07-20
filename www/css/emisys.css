@@ -42,12 +42,12 @@
     border-radius: 6px;
 }
 .button.button-balanced.red {
-	background-color: rgb(219, 68, 84);
+    background-color: rgb(219, 68, 84);
 }
 .modal .button.button-balanced {
     padding-top: 0px;
-	margin-bottom: 0;
-	border-radius: 0;
+    margin-bottom: 0;
+    border-radius: 0;
 }
 
 .tabs-top > .tabs,
@@ -89,7 +89,7 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
     margin-bottom: 10px;
 }
 #basketScroll .item{
-	background-color: transparent;
+    background-color: transparent;
 }
 .listCustomers { max-height:295px;overflow:hidden; }
 .item-small { padding: 0px; width: 95%; margin: 5px auto }
@@ -136,43 +136,43 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
     right: 8px!important;
 }
 .button-price{
- min-width:80px;
- border: 1px solid rgb(51, 51, 51);
+    min-width:80px;
+    border: 1px solid rgb(51, 51, 51);
 }
 .addToCartItem {
-	position: absolute;    
-	bottom: 0px;   
-	background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;    
+    bottom: 0px;   
+    background-color: rgba(0, 0, 0, 0.8);
     width: 100%;    
-	height: 30px;    
-	padding: 4px;    
-	color: white;
-	text-align: center;
+    height: 30px;    
+    padding: 4px;    
+    color: white;
+    text-align: center;
 }
 #cart_list .item {
-	border: 0;
-	text-align: left;
-	padding: 0 0 0 10px;
-	background-color:transparent;
-	margin-bottom: 5px;
+    border: 0;
+    text-align: left;
+    padding: 0 0 0 10px;
+    background-color:transparent;
+    margin-bottom: 5px;
 }
 #cart_list {
-	text-align: center;
-	margin-top: 20px;
-	width: 50%;
-	float: left;
-	border: 0;
-	padding: 0 10px;
+    text-align: center;
+    margin-top: 20px;
+    width: 50%;
+    float: left;
+    border: 0;
+    padding: 0 10px;
 }
 #cart_list > div {
-	border: 1px solid #666;
+    border: 1px solid #666;
 }
 .modal {
     top: 0;
-	right: 0;
-	left: 0;
-	width: 100%;
-	position: relative;
+    right: 0;
+    left: 0;
+    width: 100%;
+    position: relative;
 }
 .modal-wrapper {
     width: 60%;
@@ -184,24 +184,24 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
     margin: 0px auto;
 }
 .modal th {
-	background-color: #dddddd;
-	border-bottom: 1px solid #000;
-	padding: 5px;
+    background-color: #dddddd;
+    border-bottom: 1px solid #000;
+    padding: 5px;
 }
 .modal td {
-	text-align: center;
-	padding: 5px;
-	font-size: 16px;
+    text-align: center;
+    padding: 5px;
+    font-size: 16px;
 }
 #history .item {
-	padding: 0px 0 0 10px;
-	margin: 5px 10px;
-        width: 46%;
-        float: left;
+    padding: 0px 0 0 10px;
+    margin: 5px 10px;
+    width: 46%;
+    float: left;
 }
 #history .item .button {
-	min-height: 30px;
-        line-height: 32px;
+    min-height: 30px;
+    line-height: 32px;
 }
 
 #catalogScroll.scroll-view.scroll-y 
@@ -210,3 +210,22 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
     max-height: 572px;
     margin-bottom: 10px;
 }
+#customerBasket  .picture img { height: 75px; }
+#customerFooter {
+    background-color: #000;
+    height: 70px;
+    padding-bottom: 10px;
+    bottom: 0;
+    color: #fff;
+    background-image: url("../img/by-emisys-logo.png");
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    background-size: 93px 60px;
+    display: flex;
+    position: absolute;
+    z-index: 5;
+    width: 100%;
+    border-top: 1px solid white;
+}
+
+.scanme-little { height: 50px; margin-right: 10px; }
