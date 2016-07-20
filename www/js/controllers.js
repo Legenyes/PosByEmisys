@@ -387,6 +387,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                 focusFirstInput: true
             }).then(function (modal) {
                 $scope.modalInfo = modal;
+                $scope.showInfoModal();
             });
             $scope.showInfoModal = function () {
                 $scope.card_uid = "";
@@ -414,6 +415,5 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
             {
             };
 
-            // $scope.showInfoModal();
         })
         ;
