@@ -156,7 +156,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                 };
 
                 $scope.prepareTransaction = function (cardUid) {
-                    if ($scope.resteAPayer < -10 || $scope.resteAPayer == 0)
+                    if ($scope.resteAPayer < -10 || ngCart.getCart().items.length == 0)
                         return;
 
                     for (cus in $scope.customers) {
