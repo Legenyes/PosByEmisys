@@ -392,7 +392,8 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
             $scope.showInfoModal = function () {
                 $scope.card_uid = "";
                 $scope.cardUid = "";
-                $scope.modalInfo.show();
+                if($scope.modalInfo) 
+                    $scope.modalInfo.show();
                 focus("modalInfo");
             };
 
@@ -414,6 +415,9 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
             $scope.cardUidBLur = function ()
             {
             };
-
+            $scope.$on('$ionicView.beforeEnter', function () {               
+                $scope.showInfoModal();
+            });
+            
         })
         ;
