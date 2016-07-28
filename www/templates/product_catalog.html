@@ -9,7 +9,7 @@
 
 <ion-list id="history" ng-show="hist.length">
     <ion-item class="item-remove-animate item-icon-right" ng-repeat="item in hist | limitTo:4" ng-click="showHistoryModal($index)">
-        <div style="width: auto; float: left"><span class="button button-title">{{ item.customers[0].firstname}} {{ item.customers[0].lastname}}</span></div> 
+        <div style="width: auto; float: left"><span class="button button-title">{{ item.time }}</span></div> 
         <div style="float: right">            
             <span id="qtt-{{ item.getId()}}" class="button button-number">{{ item.customers[0].amount | number}}</span>
         </div>               

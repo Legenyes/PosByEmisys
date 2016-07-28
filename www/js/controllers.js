@@ -12,7 +12,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                 $scope.payed = 0;
                 $scope.posId = window.localStorage['posId'];
                 if ($scope.posId == null)
-                    $scope.posId = 43;
+                    $scope.posId = 1;
                 $scope.terminal_id = "POS_DEMO";
                 $scope.hostDomain = "http://pos-test.byemisys.com/";
 
@@ -27,7 +27,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                 $scope.modHisto = [];
 
                 $scope.loadProducts = function () {
-                    var url = "https://eventware.lasemo.be/api/formules/list?isOnSite=1&project=9&item_isCashlessUnit=1&pos=" + $scope.posId;
+                    var url = "//live.byemisys.com/api/formules/list?isOnSite=1&project=1&item_isCashlessUnit=1&pos=" + $scope.posId;
                     $http({
                         method: 'GET',
                         url: url
@@ -38,8 +38,8 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                                         angular.forEach(response.data, function (value, key) {
                                             var price = value.formule_item[0].quantity;
                                             var picture = 'http://fakeimg.pl/200x200/?text=' + value.name;
-                                            if (value.picture != null)
-                                                picture = 'https://eventware.lasemo.be/uploads/documents/' + value.picture.name;
+                                            if (value.picture_thumb != null)
+                                                picture = "http://"+ value.picture_thumb;
                                             $product = {
                                                 'id': value.id,
                                                 'name': value.name,
@@ -214,6 +214,8 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                                 for (cus in $scope.customers) {
                                     $data.amount = $scope.customers[cus].amount;
                                     $data.session = [];
+                                    if(parseInt(cus)==0) // Save basket content only for the first customer
+                                        $data.cart = $scope.stringifyCart();
                                     $data.card_uid = $scope.customers[cus].cardUid;
                                     emisys_ajax("debit_card", $data, function (msg) {
                                         if (msg.message == "200") {
@@ -223,7 +225,9 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                                             $scope.payed = 1;
                                             if ($scope.customers.length == (parseInt(cus) + 1)) { // apply scope when all the ajax call are done
                                                 $scope.$apply();
+                                                var currentdate = new Date(); 
                                                 $hist = {
+                                                    'time': currentdate.getHours() + ":" + currentdate.getMinutes() + ":"  + currentdate.getSeconds(),
                                                     'customers': $scope.customers,
                                                     'cart': $scope.cart
                                                 };
@@ -244,6 +248,17 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                         }
                     });
 
+                }
+
+                $scope.stringifyCart = function() {
+                    var items = ngCart.getCart().items;
+                    var string = ngCart.getCart().items.length;
+                    for (var i = 0; i < items.length; i++) {
+                        var item = items[i];
+                        string += "|"+ item['_id'] + ";" + item['_name'] + ";" + item['_quantity'] + ";"  + item['_price']
+                    }                    
+                    
+                    return string;
                 }
 
                 $scope.validatePaymentModal = function () {
