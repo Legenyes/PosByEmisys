@@ -125,6 +125,17 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
     background-color: transparent;
     padding-left:0px;
 }
+#customerBasket { position: relative; height:100%;}
+#customerBasket .item.item-complex.solde{ position: absolute; bottom:0px; width:100%; height: 57px;}
+#customerBasket .button-title {
+    background-color: transparent;
+    padding-left:10px;
+}
+#customerBasket .has-picture .picture{
+    margin-right: 10px;
+}
+
+/*.has-picture .button { margin-top:14px }*/
 
 .button-delete {
     color: rgb(219, 68, 84);
@@ -140,7 +151,6 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
     border: 1px solid rgb(51, 51, 51);
 }
 .addToCartItem {
-    //position: absolute;    
     bottom: 0px;   
     background-color: rgba(0, 0, 0, 0.8);
     width: 100%;    
@@ -210,7 +220,7 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
     max-height: 572px;
     margin-bottom: 10px;
 }
-#customerBasket  .picture img { height: 75px; }
+#customerBasket  .picture img { height: 43px; margin-left:5px; } 
 #customerFooter {
     background-color: #000;
     height: 70px;
@@ -229,3 +239,57 @@ ion-tabs.tabs-color-active-positive .tab-item.activated{
 }
 
 .scanme-little { height: 50px; margin-right: 10px; }
+
+.scene h2 {
+    background-color: rgba(29,34,65,0.8);
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    line-height: 30px;
+}
+
+#stage-name p {
+    position: absolute;
+    top: 25px;
+    background-color: red;
+    padding: 7px;
+    font-size:13px;
+    color: white;
+}
+#stage-name p.stage-1,.div-stage-1 {
+    background-color: #6FBFCA !important;
+}
+
+#stage-name p.stage-2,.div-stage-2 {
+    background-color: #E44C50 !important;
+}
+.scene .label {
+    position: absolute;
+    bottom: 0px;
+    color: white;
+    width: 100%;
+    height:40px;
+    background-color: #c1c1c1;
+    border-radius: 0px !important;
+}
+.scene .label p {
+    margin: 10px 0 0 6px;
+    font-size: 18px;
+    float: left;
+}
+.artist .description {
+    background-color: rgba(29,34,65,0.8);
+    color:white;
+    padding:15px;    
+    white-space: normal;
+    text-align: justify;
+    text-justify: inter-word;
+    font-size: 14px;    
+    height: 270px;
+}
+.scene .name {
+    height: 200px;
+    position: relative;
+}
+
+#customerScreen .item-complex .item-content, .item-radio .item-content { padding: 5px }

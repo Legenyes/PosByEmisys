@@ -16,7 +16,7 @@ angular.module('ngCart', ['ngCart.directives'])
 
                 $rootScope.$on('ngCart:change', function () {
                     ngCart.clearCart();
-                    ngCart.$save(); 
+                    ngCart.$save();
                 });
 
                 if (angular.isObject(store.get('cart'))) {
@@ -40,29 +40,28 @@ angular.module('ngCart', ['ngCart.directives'])
                 };
 
                 this.addItem = function (id, name, price, quantity, data) {
-					
+
                     var inCart = this.getItemById(id);
 
                     if (typeof inCart === 'object') {
                         //Update quantity of an item if it's already in the cart
                         inCart.setQuantity(quantity, true);
-						if((jQuery("#qtt-"+id).parent().parent().parent().position().top - 455) > 0) {
-							jQuery("#basketScroll > .scroll").attr('style','transform: translate3d(0px, -'+(jQuery("#qtt-"+id).parent().parent().parent().position().top-455)+'px, 0px) scale(1);');
-						}	
-						else
-							jQuery("#basketScroll > .scroll").attr('style','transform: translate3d(0px, 0px, 0px) scale(1);');
-						jQuery("#qtt-"+id).parent().parent().css("background-color","rgba(255,255,255,0.6)");
-						jQuery("#qtt-"+id).css("background-color","#6EE0C2");
-						setTimeout(function() {
-							jQuery("#basketScroll .item-content").css("background-color","#ffffff");
-							jQuery("#basketScroll .item-content .button-number").css("background-color","#36BC9B");
-						},800);
-						jQuery("#qtt-"+id).stop(true,true).animate({'font-size':'28px'}).animate({'font-size':'16px'});
+                        if ((jQuery("#qtt-" + id).parent().parent().parent().position().top - 455) > 0) {
+                            jQuery("#basketScroll > .scroll").attr('style', 'transform: translate3d(0px, -' + (jQuery("#qtt-" + id).parent().parent().parent().position().top - 455) + 'px, 0px) scale(1);');
+                        } else
+                            jQuery("#basketScroll > .scroll").attr('style', 'transform: translate3d(0px, 0px, 0px) scale(1);');
+                        jQuery("#qtt-" + id).parent().parent().css("background-color", "rgba(255,255,255,0.6)");
+                        jQuery("#qtt-" + id).css("background-color", "#6EE0C2");
+                        setTimeout(function () {
+                            jQuery("#basketScroll .item-content").css("background-color", "#ffffff");
+                            jQuery("#basketScroll .item-content .button-number").css("background-color", "#36BC9B");
+                        }, 800);
+                        jQuery("#qtt-" + id).stop(true, true).animate({'font-size': '28px'}).animate({'font-size': '16px'});
                     } else {
                         var newItem = new ngCartItem(id, name, price, quantity, data);
                         this.$cart.items.unshift(newItem);
                         $rootScope.$broadcast('ngCart:itemAdded', newItem);
-						jQuery("#basketScroll > .scroll").attr('style','transform: translate3d(0px, 0px, 0px) scale(1);');
+                        jQuery("#basketScroll > .scroll").attr('style', 'transform: translate3d(0px, 0px, 0px) scale(1);');
                     }
 
                     $rootScope.$broadcast('ngCart:change', {});
@@ -199,7 +198,6 @@ angular.module('ngCart', ['ngCart.directives'])
                     }
                 };
 
-
                 this.$restore = function (storedCart) {
                     var _self = this;
                     _self.init();
@@ -228,7 +226,6 @@ angular.module('ngCart', ['ngCart.directives'])
                     this.setData(data);
                 };
 
-
                 item.prototype.setId = function (id) {
                     if (id)
                         this._id = id;
@@ -241,7 +238,6 @@ angular.module('ngCart', ['ngCart.directives'])
                     return this._id;
                 };
 
-
                 item.prototype.setName = function (name) {
                     if (name)
                         this._name = name;
@@ -249,29 +245,29 @@ angular.module('ngCart', ['ngCart.directives'])
                         $log.error('A name must be provided');
                     }
                 };
+
                 item.prototype.getName = function () {
                     return this._name;
                 };
 
                 item.prototype.setPrice = function (price) {
-                    this._price = parseFloat(price);    
+                    this._price = parseFloat(price);
                 };
+
                 item.prototype.getPrice = function () {
                     return this._price;
                 };
 
-
                 item.prototype.setQuantity = function (quantity, relative) {
-
 
                     var quantityInt = parseInt(quantity);
                     if (quantityInt % 1 === 0) {
                         if (relative === true) {
-							if(quantity>1)
-								this._quantity += 1;
-							else
-								this._quantity += quantityInt;
-							
+                            if (quantity > 1)
+                                this._quantity += 1;
+                            else
+                                this._quantity += quantityInt;
+
                         } else {
                             this._quantity = quantityInt;
                         }
@@ -281,7 +277,8 @@ angular.module('ngCart', ['ngCart.directives'])
                         this._quantity = 1;
                         $log.info('Quantity must be an integer and was defaulted to 1');
                     }
-                    $rootScope.$broadcast('ngCart:change', {});
+                    if(relative)
+                        $rootScope.$broadcast('ngCart:change', {});
 
                 };
 
@@ -300,7 +297,6 @@ angular.module('ngCart', ['ngCart.directives'])
                     else
                         $log.info('This item has no data');
                 };
-
 
                 item.prototype.getTotal = function () {
                     return +parseFloat(this.getQuantity() * this.getPrice()).toFixed(2);

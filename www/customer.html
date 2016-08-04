@@ -10,17 +10,60 @@
         <link href="css/emisys.css" rel="stylesheet">
 
     </head>
-    <body>
+    <body id="customerScreen">        
+        <div id="customerScanCard" class="modal-backdrop active hide">
+            <div class="modal-backdrop-bg"></div>
+            <div class="modal-wrapper">
+                <div class="modal">
+                    <div style="    text-align: center;    margin-top: 10px;">  
+                        <img class="scanme" src="img/scan.png" style="margin: auto" />
+                        <p style="font-size: 19px; margin-top: 32px; font-weight: bold;">Scanner la carte pour payer</p>
+                    </div>
 
+                    <div style="max-height:295px;"> 
+                        <table id="listCustomers"></table>
+                    </div>
+
+                    <div style="width: 100%;">
+                        <button class="button button-full button-balanced red"  >
+                            Reste à payer <span id="resteAPayer">0</span> Tickets
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         <div class="pane row  responsive-sm" style="padding-bottom: 75px;">
             <div class="col col-50">   
+                <div id="tarif" class='item item-complex' style="height:100%">
+                    <div  class='item-content'>
+                        <img style="width:100%" src="/img/tarif_ronquieres.jpg">
+                    </div>
+                </div>
+
                 <div id="customerBasket" class="list"></div>
                 <div id="customerCardInfo" class="hide"></div>
+
             </div>
-            <div class = "col">
-                <div class='item item-complex' style="height:100%">
-                    <div class='item-content'>
-                        <img style="width:100%" src="http://www.ronquieresfestival.be/sites/default/files/styles/bannieres/public/banners/banner-ronquieres-2016.jpg?itok=_GRZaYfV">
+            <div class = "col col-50">
+                <div class='item item-complex' style="height:100%">                   
+
+                    <div id="lineup" class='item item-complex hide' style="height:100%">
+                        <div class='item-content'>
+                            <img style="width:100%" src="http://www.ronquieresfestival.be/sites/default/files/styles/bannieres/public/banners/banner-ronquieres-2016.jpg?itok=_GRZaYfV">
+
+                            <div class="scene ">
+                                <h2>Prochain concert</h2>
+                                <div class="artist ">
+                                    <div class="name">
+                                        <div id="stage-name"><p class="stage-1"></p></div>
+                                        <div class="label div-stage-1"><p></p></div>
+                                    </div>
+                                    <div class="description"></div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -29,13 +72,17 @@
                 </div>
             </div>
         </div>
-        <div id="customerFooter"></div>
-
+        <div id="customerFooter"></div>      
 
         <script src="js/jquery-1.8.3.min.js"></script>
+        <script src="js/moment-with-locales.min.js"></script>        
 
         <script>
             window.addEventListener("message", receiveMessage, false);
+
+            $(document).ready(function () {
+                refreshLineup();
+            });
 
             function receiveMessage(event)
             {
@@ -43,9 +90,20 @@
                 if (event.data.action == "ngCart:change")
                     refreshCustomerBasket(event.data);
                 else if (event.data.action == "paymentDialog:open")
-                    customerScanCard();
+                    $("#customerScanCard").removeClass('hide');
+                else if (event.data.action == "paymentDialog:close")
+                { 
+                    $('.scanme').attr('src', 'img/scan.png');
+                    $('.button-balanced').removeClass('green');
+                    $('.button-balanced').addClass('red');
+                    $('.button-balanced').html('Reste à payer <span id="resteAPayer">0</span> Tickets');
+                    $("#customerScanCard").addClass('hide');
+                    $("#listCustomers").html('');
+                }  
                 else if (event.data.action == "cardinfoDialog:open")
                     customerCardInfo(event.data);
+                else if (event.data.action == "cardinfoDialog:close")
+                    customerCardInfo(null);
                 else if (event.data.action == "customers:add")
                     customerAdd(event.data);
             }
@@ -53,88 +111,115 @@
             function customerAdd(data)
             {
                 refreshCustomerBasket(data);
-
+                var resteAPayer = data.resteAPayer;
                 var customers = data.customers;
-                listItem = "<div class='item item-complex' ><div class='item-content'><table style='width:100%'>";
+                customerItem = "<tr><th>Carte #</th><th>Client</th><th>Dépensé</th><th>Solde</th></tr>";
                 for (var i = 0; i < customers.length; i++) {
-                    listItem += "<tr>\n\
-                            <td>" + customers[i].emisys_number + "</td>\n\
-                            <td>" + customers[i].firstname + " " + customers[i].lastname + "</td>\n\
-                            <td>-" + customers[i].amount + "</td>\n\
-                            <td>" + customers[i].soldeApres + "</td>\n\
-                            </tr>";
+                    customerItem += "<tr>\n\
+                                <td>" + customers[i].emisys_number + "</td>\n\
+                                <td>" + customers[i].firstname + " " + customers[i].lastname + "</td>\n\
+                                <td>-" + customers[i].amount + "</td>\n\
+                                <td>" + customers[i].soldeApres + "</td>\n\
+                                </tr>";
                 }
-                listItem += "</table></div></div>";
-
-                $("#customerBasket").append(listItem);
-            }
-
-            function customerScanCard()
-            {
-                $("#customerScanCard").removeClass('hide');
-                $("#customerCardInfo").addClass('hide');
+                
+                $("#resteAPayer").html(resteAPayer);
+                $("#listCustomers").html(customerItem);
+                if(resteAPayer<=0) 
+                {
+                    $('.scanme').attr('src', 'img/scan-green.png');
+                    $('.button-balanced').addClass('green');
+                    $('.button-balanced').removeClass('red');
+                    $('.button-balanced').html('Payer la commande');
+                }
+                if(data.payed) 
+                    $('.button-balanced').html('Commande payé');
+                    
             }
 
             function customerCardInfo(data)
             {
-                $("#customerBasket").addClass('hide');
-                $("#customerCardInfo").removeClass('hide');
+                if (data != null) {
+                    $("#customerBasket").addClass('hide');
+                    $("#customerCardInfo").removeClass('hide');
 
-                var customer = data.customer;
-                var transactions = data.transactions;
-                listItem = "<div class='item item-complex' ><div class='item-content'>";
-                listItem += "<span class='pull-right'>";
-                listItem += "<span class='button button-number'>" + customer.solde + "</span>";
-                listItem += "</span>";
-                listItem += "<span class='button button-title'>" + customer.emisys_number + " (" + customer.firstname + " " + customer.lastname + ")</span>";
-                listItem += "</div></div>";
+                    $("#tarif").addClass('hide');
 
-                listItem += "<div class='item item-complex' ><div class='item-content'><table style='width:100%'>";
-                for (var i = 0; i < transactions.length; i++) {
-                    console.log(transactions[i]);
-                    if (transactions[i].TYPE == "C" || transactions[i].TYPE == "D")
-                    {
-                        var sign = "+"
-                        if (transactions[i].TYPE == "D")
-                            sign = "-";
-                        listItem += "<tr>\n\
-                            <td>" + transactions[i].TRANSACTION_DATE + "</td>\n\
-                            <td>" + transactions[i].TRANSACTION_TIME + "</td>\n\
-                            <td>" + transactions[i].TERMINAL_ID + "</td>\n\
-                            <td>" + sign + transactions[i].TRANSACTION_VALUE + "</td>\n\
-                            <td>" + transactions[i].CURRENT_VALUE + "</td>\n\
-                            </tr>";
+                    var customer = data.customer;
+                    var transactionsR = data.transactions.slice(0,15);
+                    var transactions = transactionsR.reverse();
+                    listItem ="";
+                    listItem += "<div class='item item-complex' ><div class='item-content scene'><h2>15 dernières transactions</h2><table style='width:100%; color:#666; margin-top:10px;'>";
+                    for (var i = 0; i < transactions.length; i++) {
+                        if ((transactions[i].TYPE == "C" || transactions[i].TYPE == "D"))
+                        {
+                            var sign = "+"
+                            var transactionImg = "img/green-arrow_top.png";
+                            if (transactions[i].TYPE == "D"){
+                                sign = "-";                               
+                                transactionImg = "img/red-arrow_bottom.png";
+                            }
+                            var tr_style="";
+                            if(i % 2 === 0 )
+                                tr_style = ' style="background-color: #6FBFCA !important"';
+                            
+                            listItem += "<tr "+ tr_style +">\n\
+                                <td style='padding-top:7px;padding-bottom:7px;'>" + transactions[i].TRANSACTION_DATE + "</td>\n\
+                                <td>" + transactions[i].TRANSACTION_TIME.substring(0, 2) + ":" + transactions[i].TRANSACTION_TIME.substring(2, 4) + ":" + transactions[i].TRANSACTION_TIME.substring(4, 6) +" </td>\n\
+                                <td>" + transactions[i].TERMINAL_ID + "</td>\n\
+                                <td><img src='"+ transactionImg +"' /></td>\n\
+                                <td>" + sign + transactions[i].TRANSACTION_VALUE + "</td>\n\
+                                <td>" + transactions[i].CURRENT_VALUE + "</td>\n\
+                                </tr>";
+                        }
                     }
-                }
-                listItem += "</table></div></div>";
+                    listItem += "</table></div></div>";
+                    listItem += "<div class='item item-complex' ><div class='item-content'>";
+                    listItem += "<span class='pull-right'>";
+                    listItem += "<span class='button button-number'>" + customer.solde + "</span>";
+                    listItem += "</span>";
+                    listItem += "<span class='button button-title'>" + customer.emisys_number + " (" + customer.firstname + " " + customer.lastname + ")</span>";
+                    listItem += "</div></div>";
 
-                $("#customerCardInfo").html(listItem);
+
+                    $("#customerCardInfo").html(listItem);
+                } else {
+                    $("#customerCardInfo").addClass('hide');
+                    $("#tarif").removeClass('hide');
+                }
             }
 
             function refreshCustomerBasket(data)
             {
-                $("#customerScanCard").addClass('hide');
                 $("#customerCardInfo").addClass('hide');
                 $("#customerBasket").removeClass('hide');
 
+                $("#tarif").addClass('hide');
+
                 var items = data.items;
                 var resteAPayer = data.resteAPayer;
+                $("#resteAPayer").html(resteAPayer);
 
                 var table = "<table class='customerBasket'>";
                 var listItem = "";
                 for (var i = 0; i < items.length; i++) {
+                    var pictureClass = '';
+                    /*if (items.length <= 5)
+                     pictureClass = 'has-picture';*/
+
                     table += "<tr><td class='picture'><img src='" + items[i]['_data']['picture'] + "' style='height:50px'></td>";
                     table += "<td class='title'>" + items[i]['_name'] + "</td>";
                     table += "<td class='quantity'>" + items[i]['_quantity'] + "</td>";
                     table += "<td class='total'>" + items[i]['_price'] * items[i]['_quantity'] + "</td></tr>";
 
-                    listItem += "<div class='item item-complex' ><div class='item-content'>";
+                    listItem += "<div class='item item-complex' ><div class='item-content " + pictureClass + "'>";
 
                     listItem += "<span class='pull-right'>";
-                    listItem += "<span class='button button-number'>" + items[i]['_quantity'] + "</span>";
-                    listItem += "<span class='button button-price'>" + items[i]['_price'] * items[i]['_quantity'] + "</span>";
+                    listItem += "<span class='button button-price'>" + items[i]['_price'] * items[i]['_quantity'] + " T.</span>";
                     listItem += "</span>";
 
+                    /*if (items.length <= 5)*/
+                    listItem += "<span class='button button-number'>" + items[i]['_quantity'] + "</span>";
                     listItem += "<span class='picture'><img  src='" + items[i]['_data']['picture'] + "'></span>";
                     listItem += "<span class='button button-title'>" + items[i]['_name'] + "</span>";
 
@@ -142,26 +227,46 @@
                 }
 
                 if (items.length > 0) {
-                    listItem += "<div class='item item-complex' ><div class='item-content'>";
+                    listItem += "<div class='item item-complex solde'><div class='item-content'>";
 
                     listItem += "<span class='pull-right'>";
-                    var img = '<img class="scanme-little" src="img/scan.png" />';
-                    if (resteAPayer <= 0)
-                        img = '<img class="scanme-little" src="img/scan-green.png" />';
-
-                    listItem += "<span>" + img + "</span>";
-                    listItem += "<span class='button button-price'>" + resteAPayer + "</span>";
+                    listItem += "<span class='button button-price'><strong>" + data.total + " T.</strong></span>";
                     listItem += "</span>";
 
                     listItem += "<span class='picture'></span>";
-                    listItem += "<span class='button button-title'>Reste à payer</span>";
+                    listItem += "<span class='button button-title'><strong>A payer</strong></span>";
 
                     listItem += "</div></div>";
 
                     table += "</table>";
+                } else {
+                    $("#tarif").removeClass('hide');
+                    refreshLineup();
                 }
 
                 $("#customerBasket").html(listItem);
+            }
+
+
+            function refreshLineup()
+            {
+                $.get("http://live.byemisys.com/api/artists/list?project=1&sort=lineups.liveStartDate&dir=ASC", function (data) {
+                    for (var i in data) {
+                        var a = data[i];
+
+                        if (moment(a.lineups[0].live_start_date).toDate().getTime() > moment().toDate().getTime())
+                        {
+                            $('.artist .label p').html(moment(a.lineups[0].live_start_date).locale("fr").format('LT') + " : " + a.alias_name);
+                            $('.artist .description').html(a.description);
+                            $('#stage-name p').html(a.lineups[0].stage.name);
+
+                            $('.artist .name').attr("style", "background-image:url(http://" + a.artist_picture_lineup + ")");
+
+                            $("#lineup").removeClass('hide');
+                            break;
+                        }
+                    }
+                });
             }
 
         </script>

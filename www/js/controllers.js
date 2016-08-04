@@ -14,7 +14,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                 if ($scope.posId == null)
                     $scope.posId = 1;
                 $scope.terminal_id = "POS_DEMO";
-                $scope.hostDomain = "http://pos-test.byemisys.com/";
+                $scope.hostDomain = "*";
 
                 var cookiesTerminal_id = $cookies.get('terminal_id');
                 if (cookiesTerminal_id != "" && cookiesTerminal_id != null)
@@ -39,7 +39,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                                             var price = value.formule_item[0].quantity;
                                             var picture = 'http://fakeimg.pl/200x200/?text=' + value.name;
                                             if (value.picture_thumb != null)
-                                                picture = "http://"+ value.picture_thumb;
+                                                picture = "http://" + value.picture_thumb;
                                             $product = {
                                                 'id': value.id,
                                                 'name': value.name,
@@ -63,7 +63,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                     $scope.aPayer = ngCart.totalCost();
                     $scope.resteAPayer = $scope.aPayer - $scope.dejaPaye;
 
-                    $data = {'action': 'ngCart:change', 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
+                    $data = {'action': 'ngCart:change', 'total': $scope.aPayer, 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
                     customerScreen.postMessage($data, $scope.hostDomain);
                 });
 
@@ -92,7 +92,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
 
                 $scope.emptyBasket = function () {
                     ngCart.empty();
-                    $data = {'action': 'ngCart:change', 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
+                    $data = {'action': 'ngCart:change', 'total': $scope.aPayer, 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
                     customerScreen.postMessage($data, $scope.hostDomain);
                 }
 
@@ -209,30 +209,35 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                             };
                             $scope.customers.push($customer);
 
-                            
+
                             if ($scope.soldeCard >= $scope.resteAPayer) { // loop on customer when all is payed and debit cards
                                 for (cus in $scope.customers) {
                                     $data.amount = $scope.customers[cus].amount;
                                     $data.session = [];
-                                    if(parseInt(cus)==0) // Save basket content only for the first customer
+                                    if (parseInt(cus) == 0) // Save basket content only for the first customer
                                         $data.cart = $scope.stringifyCart();
                                     $data.card_uid = $scope.customers[cus].cardUid;
                                     emisys_ajax("debit_card", $data, function (msg) {
                                         if (msg.message == "200") {
+                                            $scope.resteAPayer = 0;
                                             $scope.aPayer = 0;
                                             $scope.dejaPaye = 0;
-                                            $scope.resteAPayer = 0;
                                             $scope.payed = 1;
+                                            
+                                            $data = {'action': 'customers:add',  'payed':true, 'total': ngCart.totalCost(), 'customers': $scope.customers, 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
+                                            customerScreen.postMessage($data, $scope.hostDomain);
+                                                                                        
                                             if ($scope.customers.length == (parseInt(cus) + 1)) { // apply scope when all the ajax call are done
                                                 $scope.$apply();
-                                                var currentdate = new Date(); 
+                                                var currentdate = new Date();
                                                 $hist = {
-                                                    'time': currentdate.getHours() + ":" + currentdate.getMinutes() + ":"  + currentdate.getSeconds(),
+                                                    'time': currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds(),
                                                     'customers': $scope.customers,
                                                     'cart': $scope.cart
                                                 };
                                                 $scope.hist.unshift($hist);
                                             }
+
                                         }
                                     });
                                 }
@@ -240,24 +245,24 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                                 $scope.dejaPaye += amount;
                                 $scope.card_uid = cardUid;
                                 $scope.resteAPayer = $scope.aPayer - $scope.dejaPaye;
+                                $data = {'action': 'customers:add', 'total': $scope.aPayer, 'customers': $scope.customers, 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
+                                customerScreen.postMessage($data, $scope.hostDomain);
                                 $scope.$apply();
                             }
-                            $data = {'action': 'customers:add', 'customers': $scope.customers, 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
-                            customerScreen.postMessage($data, $scope.hostDomain);
 
                         }
                     });
 
                 }
 
-                $scope.stringifyCart = function() {
+                $scope.stringifyCart = function () {
                     var items = ngCart.getCart().items;
-                    var string = ngCart.getCart().items.length;
+                    var string = ngCart.getCart().items.length + "|";
                     for (var i = 0; i < items.length; i++) {
                         var item = items[i];
-                        string += "|"+ item['_id'] + ";" + item['_name'] + ";" + item['_quantity'] + ";"  + item['_price']
-                    }                    
-                    
+                        string += item['_id'] + ";" + item['_name'] + ";" + item['_quantity'] + ";" + item['_price'] + "|";
+                    }
+
                     return string;
                 }
 
@@ -273,7 +278,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                     $scope.customers = [];
                     $scope.customersUid = [];
                     ngCart.empty();
-                    $data = {'action': 'ngCart:change', 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
+                    $data = {'action': 'ngCart:change', 'total': $scope.aPayer, 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
                     customerScreen.postMessage($data, $scope.hostDomain);
                     $scope.modalPayment.hide();
 
@@ -295,7 +300,9 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                         ngCart.empty();
                         $scope.payed = 0;
                     }
-                    $data = {'action': 'ngCart:change', 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
+                    $data = {'action': 'ngCart:change', 'total': $scope.aPayer, 'items': ngCart.getCart().items, 'resteAPayer': $scope.resteAPayer};
+                    customerScreen.postMessage($data, $scope.hostDomain);
+                    $data = {'action': 'paymentDialog:close'};
                     customerScreen.postMessage($data, $scope.hostDomain);
                 });
                 // Execute action on remove modal
@@ -305,6 +312,13 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
 
                 ngCart.setShipping(0);
                 ngCart.setTaxRate(0);
+                var posName = document.getElementById('posName');
+                posName.addEventListener('contextmenu', function (ev) {
+                    ev.preventDefault();
+                    var newId = window.prompt("Encode new Terminal ID", "POS_DEMO");
+                    document.location.href = "terminal.php?id=" + newId;
+                    return false;
+                }, false);
             }])
 
         .controller('ChatsCtrl', function ($scope, Chats) {
@@ -336,8 +350,9 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
             };
 
             $scope.checkCardUid = function (strScanned) {
+                console.log(strScanned);
                 document.getElementById("cardUid2").value = "";
-
+                
                 var find = ["&", "é", "\"", "'", "(", "§", "è", "!", "ç", "à"];
                 var replace = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
                 for (var c in strScanned) {
@@ -347,7 +362,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                 }
                 // convert deciaml to hexa and reverse block of tow char
                 var cardUid = Number(strScanned).toString(16).match(/../g).reverse().join("");
-
+                
                 if (cardUid.length != 8)
                     alert("Erreur dans la lecture de la carte. Veuillez réessayer.");
                 else
@@ -407,7 +422,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
             $scope.showInfoModal = function () {
                 $scope.card_uid = "";
                 $scope.cardUid = "";
-                if($scope.modalInfo) 
+                if ($scope.modalInfo)
                     $scope.modalInfo.show();
                 focus("modalInfo");
             };
@@ -422,6 +437,8 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
             $scope.$on('modal.hidden', function () {
 
                 $scope.customers = [];
+                $data = {'action': 'cardinfoDialog:close'};
+                customerScreen.postMessage($data, '*');
             });
             // Execute action on remove modal
             $scope.$on('modal.removed', function () {
@@ -430,9 +447,9 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
             $scope.cardUidBLur = function ()
             {
             };
-            $scope.$on('$ionicView.beforeEnter', function () {               
+            $scope.$on('$ionicView.beforeEnter', function () {
                 $scope.showInfoModal();
             });
-            
+
         })
         ;
