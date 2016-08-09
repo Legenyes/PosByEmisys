@@ -168,17 +168,24 @@
                                 <td>" + transactions[i].TRANSACTION_TIME.substring(0, 2) + ":" + transactions[i].TRANSACTION_TIME.substring(2, 4) + ":" + transactions[i].TRANSACTION_TIME.substring(4, 6) +" </td>\n\
                                 <td>" + transactions[i].TERMINAL_ID + "</td>\n\
                                 <td><img src='"+ transactionImg +"' /></td>\n\
-                                <td>" + sign + transactions[i].TRANSACTION_VALUE + "</td>\n\
+                                <td>" +  transactions[i].TRANSACTION_VALUE + "</td>\n\
                                 <td>" + transactions[i].CURRENT_VALUE + "</td>\n\
                                 </tr>";
                         }
                     }
+                    
+                    var customer = "";
+                    if(customer.firstname!=null)
+                        customer = customer.firstname;
+                    if(customer.lastname!=null)
+                        customer += " " +customer.lastname;
+                    
                     listItem += "</table></div></div>";
                     listItem += "<div class='item item-complex' ><div class='item-content'>";
                     listItem += "<span class='pull-right'>";
                     listItem += "<span class='button button-number'>" + customer.solde + "</span>";
                     listItem += "</span>";
-                    listItem += "<span class='button button-title'>" + customer.emisys_number + " (" + customer.firstname + " " + customer.lastname + ")</span>";
+                    listItem += "<span class='button button-title'>" + customer.emisys_number + " " + customer + "</span>";
                     listItem += "</div></div>";
 
 
@@ -234,7 +241,7 @@
                     listItem += "</span>";
 
                     listItem += "<span class='picture'></span>";
-                    listItem += "<span class='button button-title'><strong>A payer</strong></span>";
+                    listItem += "<span class='button button-title'><strong>À payer</strong></span>";
 
                     listItem += "</div></div>";
 
