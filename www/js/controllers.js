@@ -44,7 +44,7 @@ angular.module('starter.controllers', ['ngCart', 'ionic', 'ngCookies'])
                                                 'id': value.id,
                                                 'name': value.name,
                                                 'isOnSite': value.is_on_site,
-                                                'price': parseInt(value.price_with_vat) >= 0 ? parseInt(price) : 0,
+                                                'price': parseInt(value.price_with_vat) >= 0 ? price : 0,
                                                 'picture': picture
                                             };
                                             this.push($product);
